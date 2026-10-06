@@ -2,170 +2,920 @@
   "_meta": {
     "lastUpdated": "2026-10-06",
     "field": "无线感知 / 普适计算",
-    "note": "数据更新于该日期。截稿日期每年可能变动，投稿前务必以官网 CFP 为准。",
-    "maintainers": ["xiuliangwu"]
+    "note": "所有重要字段均带 source 与 confidence。事实数据与编辑判断严格分开——values 维度评分是编辑解读，不是官方数据。",
+    "maintainers": [
+      "xiuliangwu"
+    ],
+    "dataPolicy": "无法核实的数据宁可不填，也不用估算。留空会在页面上显示为「暂无核实数据」。"
+  },
+  "sources": {
+    "openaccept": {
+      "name": "OpenAccept",
+      "url": "https://openaccept.org/",
+      "tier": 3,
+      "desc": "社区维护的录用率数据库，收录年份较全"
+    },
+    "official": {
+      "name": "会议官网",
+      "tier": 1,
+      "desc": "CFP、征稿说明、官方统计"
+    },
+    "acm": {
+      "name": "ACM Digital Library",
+      "url": "https://dl.acm.org/",
+      "tier": 2,
+      "desc": "官方论文集与录用统计"
+    },
+    "ccf": {
+      "name": "CCF 推荐目录",
+      "url": "https://www.ccf.org.cn/Academic_Evaluation/By_category/",
+      "tier": 2,
+      "desc": "中国计算机学会推荐国际会议期刊目录"
+    },
+    "wiki": {
+      "name": "Wikipedia",
+      "tier": 3,
+      "desc": "成立年份等背景事实"
+    },
+    "editor": {
+      "name": "编辑判断",
+      "tier": 4,
+      "desc": "基于征稿范围和历年录用论文的解读，非官方数据"
+    }
   },
   "tags": [
-    { "id": "wifi-sensing", "name": "WiFi 感知", "color": "blue" },
-    { "id": "mmwave-radar", "name": "毫米波雷达", "color": "blue" },
-    { "id": "device-free", "name": "无设备感知", "color": "teal" },
-    { "id": "har", "name": "活动识别", "color": "teal" },
-    { "id": "localization", "name": "定位追踪", "color": "green" },
-    { "id": "ubiquitous", "name": "普适计算", "color": "purple" },
-    { "id": "mobile-systems", "name": "移动系统", "color": "amber" },
-    { "id": "iot-sensing", "name": "物联网感知", "color": "coral" },
-    { "id": "wireless-network", "name": "无线网络", "color": "pink" },
-    { "id": "signal-processing", "name": "信号处理", "color": "gray" },
-    { "id": "embedded", "name": "嵌入式", "color": "gray" }
+    {
+      "id": "wifi-sensing",
+      "name": "WiFi 感知",
+      "color": "blue"
+    },
+    {
+      "id": "mmwave-radar",
+      "name": "毫米波雷达",
+      "color": "blue"
+    },
+    {
+      "id": "device-free",
+      "name": "无设备感知",
+      "color": "teal"
+    },
+    {
+      "id": "har",
+      "name": "活动识别",
+      "color": "teal"
+    },
+    {
+      "id": "localization",
+      "name": "定位追踪",
+      "color": "green"
+    },
+    {
+      "id": "ubiquitous",
+      "name": "普适计算",
+      "color": "purple"
+    },
+    {
+      "id": "mobile-systems",
+      "name": "移动系统",
+      "color": "amber"
+    },
+    {
+      "id": "iot-sensing",
+      "name": "物联网感知",
+      "color": "coral"
+    },
+    {
+      "id": "wireless-network",
+      "name": "无线网络",
+      "color": "pink"
+    },
+    {
+      "id": "signal-processing",
+      "name": "信号处理",
+      "color": "gray"
+    },
+    {
+      "id": "embedded",
+      "name": "嵌入式",
+      "color": "gray"
+    },
+    {
+      "id": "wearable",
+      "name": "可穿戴",
+      "color": "pink"
+    },
+    {
+      "id": "privacy",
+      "name": "感知隐私",
+      "color": "red"
+    }
   ],
   "conferences": [
     {
       "id": "ubicomp",
       "name": "ACM International Joint Conference on Pervasive and Ubiquitous Computing",
       "shortName": "UbiComp",
-      "fullName": "ACM UbiComp",
-      "rank": "领域旗舰",
-      "ccf": "A",
       "type": "conference",
-      "tags": ["ubiquitous", "har", "mobile-systems"],
-      "description": "普适计算领域最核心的会议，UbiComp / ISWC / UbiComp-SEASONAL 联合。CMU 主导，学术影响力在这个领域内最高。接受率约 15%。",
+      "rank": "领域旗舰",
+      "tags": [
+        "ubiquitous",
+        "har",
+        "mobile-systems"
+      ],
       "link": "https://www.ubicomp.org/",
-      "timeline": { "cycle": "每年 9-10 月", "months": "提前 5 个月征稿", "bufferMonths": 1 },
+      "dblp": "https://dblp.uni-trier.de/db/conf/ubicomp/",
+      "founded": 2003,
+      "frequency": "每年（与 ISWC 联合）",
+      "organizer": "ACM（CMU 主导）",
+      "ccf": "A",
+      "description": "普适计算领域最核心的会议，UbiComp / ISWC 联合举办，另有 SEASONAL 独立分会场。学术影响力在这个领域内最高。",
+      "values": {
+        "hci": 5,
+        "sensing": 4,
+        "systems": 3,
+        "mobile": 4,
+        "hardware": 2,
+        "theory": 3
+      },
+      "valuesNote": "UbiComp 以「人」为中心，强调技术与社会体验的结合。HCI 属性远强于系统工程，纯系统部署类工作竞争力较弱。",
+      "timeline": {
+        "cycle": "每年 10-11 月",
+        "months": "提前 5 个月征稿",
+        "bufferMonths": 1
+      },
       "history": [
-        { "year": 2026, "paper": "2026-02-01", "notification": "2026-07-26" },
-        { "year": 2025, "paper": "2025-02-01", "notification": "2025-07-15" }
+        {
+          "year": 2026,
+          "paper": "2026-02-01",
+          "notification": "2026-07-26"
+        },
+        {
+          "year": 2025,
+          "paper": "2025-02-01",
+          "notification": "2025-07-15"
+        }
       ],
       "deadlines": [
-        { "type": "第 1 轮", "date": "2026-11-01", "note": "ISWC Notes & Briefs / Workshop / Doctoral Colloquium" }
+        {
+          "type": "第 3 轮",
+          "date": "2026-11-01",
+          "note": "ISWC Notes & Briefs / Workshop / Doctoral Colloquium"
+        }
       ],
-      "tips": "三轮滚动征稿（2 月 / 5 月 / 11 月），第一轮通常最宽松。审稿周期约 5-6 个月。Wearable Computing 和 Sensing 都有专门 track，毫米波感知类工作投 Sensing track 较对口。"
+      "submission": {
+        "pageLimit": "主会 10 页 + 1 页参考文献",
+        "reviewModel": "double-blind",
+        "rebuttal": "有",
+        "tracks": [
+          "Wearable Computing",
+          "Sensing",
+          "HCI & Wellbeing",
+          "Ubiquitous Computing"
+        ],
+        "extra": "三轮滚动征稿（2月/ 5 月 / 11 月）"
+      },
+      "acceptanceStats": {
+        "source": "openaccept",
+        "confidence": "medium",
+        "lastVerified": "2026-10-06",
+        "note": "OpenAccept 数据止于 2020 年，近 years 需查官网",
+        "history": [
+          {
+            "year": 2020,
+            "submitted": 600,
+            "accepted": 121,
+            "rate": 20.17
+          },
+          {
+            "year": 2019,
+            "submitted": 700,
+            "accepted": 176,
+            "rate": 25.14
+          },
+          {
+            "year": 2018,
+            "submitted": 757,
+            "accepted": 207,
+            "rate": 27.34
+          },
+          {
+            "year": 2017,
+            "submitted": 568,
+            "accepted": 120,
+            "rate": 21.13
+          },
+          {
+            "year": 2016,
+            "submitted": 389,
+            "accepted": 100,
+            "rate": 25.71
+          },
+          {
+            "year": 2015,
+            "submitted": 394,
+            "accepted": 101,
+            "rate": 25.63
+          }
+        ]
+      },
+      "related": [
+        "imwut",
+        "percom",
+        "mobisys",
+        "ndss"
+      ],
+      "tips": "三轮中第一轮通常竞争最小。Sensing track 对无线感知类工作最对口。审稿周期约 5-6 个月，要留足等待时间。",
+      "ccfByYear": [
+        {
+          "system": "CCF",
+          "year": 2022,
+          "rank": "A"
+        },
+        {
+          "system": "CCF",
+          "year": 2026,
+          "rank": "A"
+        }
+      ]
     },
     {
       "id": "percom",
       "name": "IEEE International Conference on Pervasive Computing and Communication",
       "shortName": "PerCom",
-      "fullName": "IEEE PerCom",
-      "rank": "领域旗舰",
-      "ccf": "B",
       "type": "conference",
-      "tags": ["ubiquitous", "wifi-sensing", "localization"],
-      "description": "普适计算与通信交叉的经典会议，已办 25 届。设备无关感知（device-free sensing）是其传统强项。接受率约 15%。",
+      "rank": "领域旗舰",
+      "tags": [
+        "ubiquitous",
+        "device-free",
+        "localization"
+      ],
       "link": "https://percom.org/",
-      "timeline": { "cycle": "每年 3 月", "months": "提前 6 个月征稿", "bufferMonths": 1 },
+      "dblp": "https://dblp.uni-trier.de/db/conf/percom/",
+      "founded": 2002,
+      "frequency": "每年 3 月",
+      "organizer": "IEEE",
+      "ccf": "B",
+      "description": "普适计算与通信交叉的经典会议，已办 25 届。设备无关感知（device-free sensing）是其传统强项，定位与追踪议题也很活跃。",
+      "values": {
+        "hci": 3,
+        "sensing": 5,
+        "systems": 4,
+        "mobile": 3,
+        "hardware": 4,
+        "theory": 3
+      },
+      "valuesNote": "强调「无处不在」的通信与感知基础设施，device-free sensing 是其标志性议题。强制线下报告这一点对时间成本影响很大。",
+      "timeline": {
+        "cycle": "每年 3 月",
+        "months": "提前 6 个月征稿",
+        "bufferMonths": 1
+      },
       "history": [
-        { "year": 2027, "paper": "2026-09-11", "notification": "2026-12-18" },
-        { "year": 2026, "paper": "2025-09-12", "notification": "2025-12-18" }
+        {
+          "year": 2027,
+          "paper": "2026-09-11",
+          "notification": "2026-12-18"
+        },
+        {
+          "year": 2026,
+          "paper": "2025-09-12",
+          "notification": "2025-12-18"
+        }
       ],
       "deadlines": [],
-      "tips": "强制线下报告（除非签证/健康原因），论文需至少一位作者注册并到场，否则不进 IEEE 库。有 rebuttal 环节：11 月下旬收到早期拒稿通知或 rebuttal 邀请。9 页正文 + 1 页参考文献。"
+      "submission": {
+        "pageLimit": "9 页正文 + 1 页参考文献",
+        "reviewModel": "double-blind",
+        "rebuttal": "有（11 月下旬收到早期拒稿通知或 rebuttal 邀请）",
+        "tracks": [
+          "WIP",
+          "PhD Forum",
+          "Workshops",
+          "Tutorials"
+        ],
+        "extra": "**强制线下报告**：无签证/健康等特殊情况豁免，论文需至少一位作者注册并到场，否则不进 IEEE Digital Library"
+      },
+      "acceptanceStats": {
+        "source": null,
+        "confidence": "none",
+        "note": "OpenAccept 未收录此会议。社区数据约 15%，未经官方核实，仅供参考"
+      },
+      "related": [
+        "ubicomp",
+        "imwut",
+        "sensys"
+      ],
+      "tips": "强制线下是最大的隐性成本，申签证要留出时间。接受率约 15%（社区数据，未核实）。有 rebuttal 环节，被拒的论文有二次机会。",
+      "ccfByYear": [
+        {
+          "system": "CCF",
+          "year": 2022,
+          "rank": "B"
+        },
+        {
+          "system": "CCF",
+          "year": 2026,
+          "rank": "B"
+        }
+      ]
     },
     {
       "id": "ipsn",
       "name": "ACM/IEEE International Conference on Information Processing in Sensor Networks",
       "shortName": "IPSN",
-      "fullName": "IPSN",
-      "rank": "领域重要",
-      "ccf": "B",
       "type": "conference",
-      "tags": ["iot-sensing", "embedded", "wireless-network"],
-      "description": "传感器网络方向最顶的会议，近年与 IPSN-W、SenSys 并列为感知系统三大会议。偏底层网络与分布式算法。",
+      "rank": "领域重要",
+      "tags": [
+        "iot-sensing",
+        "embedded",
+        "wireless-network"
+      ],
       "link": "https://ipsn.acm.org/",
-      "timeline": { "cycle": "每年 5 月", "months": "提前 7 个月征稿", "bufferMonths": 1 },
+      "dblp": "https://dblp.uni-trier.de/db/conf/ipsn/",
+      "founded": 2004,
+      "frequency": "每年 5 月",
+      "organizer": "ACM/IEEE",
+      "ccf": "B",
+      "description": "传感器网络方向最顶的会议。偏底层网络算法与分布式设计，理论性强的论文更受青睐。",
+      "values": {
+        "hci": 1,
+        "sensing": 4,
+        "systems": 5,
+        "mobile": 2,
+        "hardware": 4,
+        "theory": 5
+      },
+      "valuesNote": "与 SenSys 互补：IPSN 偏「算法与网络」，SenSys 偏「系统与部署」。纯感知应用类工作在这里竞争力弱。",
+      "timeline": {
+        "cycle": "每年 5 月",
+        "months": "提前 7 个月征稿",
+        "bufferMonths": 1
+      },
       "history": [
-        { "year": 2026, "paper": "2025-10-03", "notification": "2026-02-18" }
+        {
+          "year": 2026,
+          "paper": "2025-10-03",
+          "notification": "2026-02-18"
+        }
       ],
       "deadlines": [],
-      "tips": "与 SenSys 交替或同年举办，投稿时注意是否撞期。理论性强的分布式算法工作更受青睐，纯感知应用偏少。"
+      "submission": {
+        "pageLimit": "以官网为准",
+        "reviewModel": "double-blind",
+        "rebuttal": "待核实",
+        "tracks": [
+          "Main Track",
+          "Workshop",
+          "Demo"
+        ],
+        "extra": ""
+      },
+      "acceptanceStats": {
+        "source": null,
+        "confidence": "none",
+        "note": "OpenAccept 未收录此会议，暂不填写以免误导"
+      },
+      "related": [
+        "sensys",
+        "mass",
+        "tosn"
+      ],
+      "tips": "与 SenSys 征稿期接近，注意不要撞期。分布式算法、路由协议类创新是加分项。",
+      "ccfByYear": [
+        {
+          "system": "CCF",
+          "year": 2022,
+          "rank": "B"
+        },
+        {
+          "system": "CCF",
+          "year": 2026,
+          "rank": "B"
+        }
+      ]
     },
     {
       "id": "sensys",
       "name": "ACM Conference on Embedded Networked Sensor Systems",
       "shortName": "SenSys",
-      "fullName": "ACM SenSys",
-      "rank": "领域重要",
-      "ccf": "B",
       "type": "conference",
-      "tags": ["iot-sensing", "embedded", "mobile-systems"],
-      "description": "传感器系统方向旗舰，偏系统实现与部署。强调真实部署的可行性，实验室原型需说明实际场景价值。",
+      "rank": "领域重要",
+      "tags": [
+        "iot-sensing",
+        "embedded",
+        "device-free"
+      ],
       "link": "https://sensys.org/",
-      "timeline": { "cycle": "每年 11 月", "months": "提前 6-7 个月征稿", "bufferMonths": 1 },
+      "dblp": "https://dblp.uni-trier.de/db/conf/sensys/",
+      "founded": 2003,
+      "frequency": "每年 5/11 月",
+      "organizer": "ACM/IEEE",
+      "ccf": "B",
+      "description": "传感器系统方向旗舰，与 IPSN 并列。偏系统实现与真实部署，强调场景价值而非纯实验室指标。",
+      "values": {
+        "hci": 2,
+        "sensing": 5,
+        "systems": 5,
+        "mobile": 3,
+        "hardware": 5,
+        "theory": 3
+      },
+      "valuesNote": "系统与硬件取向明显，实验室原型需要说明实际部署价值。2019 年后加入 IPSN-W 等分会场。",
+      "timeline": {
+        "cycle": "每年 5 月",
+        "months": "提前 6-7 个月征稿",
+        "bufferMonths": 1
+      },
       "history": [
-        { "year": 2025, "paper": "2025-05-28", "notification": "2025-09-08" }
+        {
+          "year": 2025,
+          "paper": "2025-05-28",
+          "notification": "2025-09-08"
+        },
+        {
+          "year": 2024,
+          "paper": "2024-05-30",
+          "notification": "2024-09-08"
+        }
       ],
       "deadlines": [],
-      "tips": "系统类工作需要对真实部署负责，只有实验室数据的稿件容易被质疑。无线感知 + 边缘部署的组合比较契合。"
+      "submission": {
+        "pageLimit": "以官网为准",
+        "reviewModel": "double-blind",
+        "rebuttal": "待核实",
+        "tracks": [
+          "Main Track",
+          "Workshop",
+          "Demo"
+        ],
+        "extra": ""
+      },
+      "acceptanceStats": {
+        "source": "openaccept",
+        "confidence": "high",
+        "lastVerified": "2026-10-06",
+        "note": "主赛道数据，2025 年 45/235。整体录用率（含 workshop）也是 20%",
+        "history": [
+          {
+            "year": 2025,
+            "submitted": 235,
+            "accepted": 45,
+            "rate": 19.15
+          },
+          {
+            "year": 2023,
+            "submitted": 179,
+            "accepted": 35,
+            "rate": 19.55
+          },
+          {
+            "year": 2022,
+            "submitted": 209,
+            "accepted": 52,
+            "rate": 24.88
+          },
+          {
+            "year": 2021,
+            "submitted": 139,
+            "accepted": 25,
+            "rate": 17.99
+          },
+          {
+            "year": 2020,
+            "submitted": 203,
+            "accepted": 43,
+            "rate": 21.18
+          },
+          {
+            "year": 2019,
+            "submitted": 144,
+            "accepted": 28,
+            "rate": 19.44
+          },
+          {
+            "year": 2018,
+            "submitted": 147,
+            "accepted": 23,
+            "rate": 15.65
+          },
+          {
+            "year": 2017,
+            "submitted": 152,
+            "accepted": 26,
+            "rate": 17.11
+          }
+        ]
+      },
+      "related": [
+        "ipsn",
+        "percom",
+        "tosn",
+        "mass"
+      ],
+      "tips": "录用率多年稳定在 17-25%，是本领域相对稳定的会议。系统类工作需要真实部署论证，评审会追问实际场景价值。",
+      "ccfByYear": [
+        {
+          "system": "CCF",
+          "year": 2022,
+          "rank": "B"
+        },
+        {
+          "system": "CCF",
+          "year": 2026,
+          "rank": "B"
+        }
+      ]
     },
     {
       "id": "mobisys",
       "name": "ACM International Conference on Mobile Systems, Applications, and Services",
       "shortName": "MobiSys",
-      "fullName": "ACM MobiSys",
-      "rank": "领域重要",
-      "ccf": "B",
       "type": "conference",
-      "tags": ["mobile-systems", "ubiquitous", "embedded"],
-      "description": "移动系统方向重要会议。感知工作若强调移动场景下的系统设计（如手机端实时推理）适合投这里。",
+      "rank": "领域重要",
+      "tags": [
+        "mobile-systems",
+        "ubiquitous",
+        "embedded"
+      ],
       "link": "https://mobsys.org/",
-      "timeline": { "cycle": "每年 6 月", "months": "提前 7 个月征稿", "bufferMonths": 1 },
+      "dblp": "https://dblp.uni-trier.de/db/conf/mobisys/",
+      "founded": 2003,
+      "frequency": "每年 6 月",
+      "organizer": "ACM",
+      "ccf": "B",
+      "description": "移动系统方向重要会议。感知工作若强调移动场景下的系统设计（如端侧实时推理）适合投这里。",
+      "values": {
+        "hci": 3,
+        "sensing": 3,
+        "systems": 5,
+        "mobile": 5,
+        "hardware": 4,
+        "theory": 3
+      },
+      "valuesNote": "系统实现和性能评估是硬要求，纯算法工作偏弱。需要真实设备上的端到端实验数据。",
+      "timeline": {
+        "cycle": "每年 6 月",
+        "months": "提前 7 个月征稿",
+        "bufferMonths": 1
+      },
       "history": [
-        { "year": 2026, "paper": "2025-12-20", "notification": "2026-03-20" }
+        {
+          "year": 2026,
+          "paper": "2025-12-20",
+          "notification": "2026-03-20"
+        },
+        {
+          "year": 2025,
+          "paper": "2024-12-20",
+          "notification": "2025-03-20"
+        }
       ],
       "deadlines": [],
-      "tips": "系统实现和性能评估是硬要求。纯算法工作偏弱，需要有真实设备上的端到端实验。"
+      "submission": {
+        "pageLimit": "以官网为准",
+        "reviewModel": "double-blind",
+        "rebuttal": "待核实",
+        "tracks": [
+          "Full Paper",
+          "Short Paper",
+          "Poster",
+          "Workshop",
+          "Demonstration"
+        ],
+        "extra": "Short Paper 篇幅较短，适合系统原型类工作"
+      },
+      "acceptanceStats": {
+        "source": "openaccept",
+        "confidence": "high",
+        "lastVerified": "2026-10-06",
+        "note": "主赛道数据",
+        "history": [
+          {
+            "year": 2025,
+            "submitted": 233,
+            "accepted": 42,
+            "rate": 18.03
+          },
+          {
+            "year": 2024,
+            "submitted": 263,
+            "accepted": 43,
+            "rate": 16.35
+          },
+          {
+            "year": 2023,
+            "submitted": 198,
+            "accepted": 41,
+            "rate": 20.71
+          },
+          {
+            "year": 2022,
+            "submitted": 176,
+            "accepted": 38,
+            "rate": 21.59
+          },
+          {
+            "year": 2021,
+            "submitted": 166,
+            "accepted": 36,
+            "rate": 21.69
+          },
+          {
+            "year": 2020,
+            "submitted": 175,
+            "accepted": 34,
+            "rate": 19.43
+          },
+          {
+            "year": 2019,
+            "submitted": 172,
+            "accepted": 39,
+            "rate": 22.67
+          },
+          {
+            "year": 2018,
+            "submitted": 138,
+            "accepted": 37,
+            "rate": 26.81
+          }
+        ]
+      },
+      "related": [
+        "ubicomp",
+        "imwut",
+        "percom"
+      ],
+      "tips": "录用率近 8 年从 27% 降到 16%，趋势明显收紧。投之前要看清跟组里工作的匹配度。Short Paper 是性价比选择。",
+      "ccfByYear": [
+        {
+          "system": "CCF",
+          "year": 2022,
+          "rank": "B"
+        },
+        {
+          "system": "CCF",
+          "year": 2026,
+          "rank": "B"
+        }
+      ]
     },
     {
       "id": "imwut",
       "name": "Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies",
       "shortName": "IMWUT",
-      "fullName": "ACM IMWUT",
-      "rank": "领域重要",
-      "ccf": "B",
       "type": "conference",
-      "tags": ["ubiquitous", "har", "wifi-sensing"],
-      "description": "UbiComp 旗下面向所有议题的期刊式会议，季刊模式，适合工作坊成果或需要更长评审周期的深挖工作。CCF B。",
+      "rank": "领域重要",
+      "tags": [
+        "ubiquitous",
+        "har",
+        "wearable"
+      ],
       "link": "https://dl.acm.org/journal/imwut",
-      "timeline": { "cycle": "每年四季", "months": "全年滚动", "bufferMonths": 0 },
+      "dblp": "https://dblp.uni-trier.de/db/journals/imwut/",
+      "founded": 2017,
+      "frequency": "每年 4 期（季刊式会议）",
+      "organizer": "ACM",
+      "ccf": "B",
+      "description": "UbiComp 旗下面向所有议题的期刊式会议，季刊模式。评审周期比主会短，适合需要更快反馈或已中会议想扩展的场景。",
+      "values": {
+        "hci": 5,
+        "sensing": 4,
+        "systems": 3,
+        "mobile": 4,
+        "hardware": 3,
+        "theory": 3
+      },
+      "valuesNote": "主题与 UbiComp 高度重合，但评审机制不同：逐期评审，首轮决定快（约 2-3 个月）。",
+      "timeline": {
+        "cycle": "每年 4 期",
+        "months": "全年滚动",
+        "bufferMonths": 0
+      },
       "history": [
-        { "year": 2026, "paper": "2026-05-01", "notification": "2026-07-26" }
+        {
+          "year": 2026,
+          "paper": "2026-05-01",
+          "notification": "2026-07-26"
+        }
       ],
       "deadlines": [],
-      "tips": "与 UbiComp 主会共享征稿节奏，接受后可在 UbiComp 现场报告，是曝光度很高的途径。适合把UbiComp 的工作做深一版。"
+      "submission": {
+        "pageLimit": "以官网为准",
+        "reviewModel": "double-blind",
+        "rebuttal": "待核实",
+        "tracks": [
+          "Covers all UbiComp topics"
+        ],
+        "extra": "可先投会议版，再扩展投此刊"
+      },
+      "acceptanceStats": {
+        "source": null,
+        "confidence": "none",
+        "note": "OpenAccept 未收录此会议，暂不填写"
+      },
+      "related": [
+        "ubicomp",
+        "percom",
+        "mobisys"
+      ],
+      "tips": "首轮决定约 2-3 个月，比 UbiComp 主会快很多。时间紧的时候是好选择。",
+      "ccfByYear": [
+        {
+          "system": "CCF",
+          "year": 2022,
+          "rank": "B"
+        },
+        {
+          "system": "CCF",
+          "year": 2026,
+          "rank": "B"
+        }
+      ]
     },
     {
       "id": "mass",
       "name": "IEEE International Conference on Mobile Ad Hoc and Sensor Networks",
       "shortName": "MASS",
-      "fullName": "IEEE MASS",
-      "rank": "领域重要",
-      "ccf": "C",
       "type": "conference",
-      "tags": ["wireless-network", "iot-sensing", "localization"],
-      "description": "移动自组织与传感器网络会议，网络侧视角较强，定位与路由类工作适合。CCF C 但在领域内认可度不错。",
+      "rank": "领域重要",
+      "tags": [
+        "wireless-network",
+        "localization",
+        "iot-sensing"
+      ],
       "link": "https://www.ieee-mass.org/",
-      "timeline": { "cycle": "每年 10 月", "months": "提前 6 个月征稿", "bufferMonths": 1 },
+      "dblp": "https://dblp.uni-trier.de/db/conf/mass/",
+      "founded": 2004,
+      "frequency": "每年 10 月",
+      "organizer": "IEEE",
+      "ccf": "C",
+      "description": "移动自组织与传感器网络会议，网络侧视角较强，定位与路由类工作适合。CCF C 但在领域内认可度不错。",
+      "values": {
+        "hci": 1,
+        "sensing": 4,
+        "systems": 4,
+        "mobile": 4,
+        "hardware": 3,
+        "theory": 4
+      },
+      "valuesNote": "网络协议与定位算法导向。纯感知信号处理类工作匹配度一般，适合有网络侧创新的工作。",
+      "timeline": {
+        "cycle": "每年 10 月",
+        "months": "提前 6 个月征稿",
+        "bufferMonths": 1
+      },
       "history": [
-        { "year": 2026, "paper": "2026-05-10", "notification": "2026-07-18" }
+        {
+          "year": 2026,
+          "paper": "2026-05-10",
+          "notification": "2026-07-18"
+        }
       ],
       "deadlines": [],
-      "tips": "适合有网络协议或定位算法创新的工作，纯感知信号处理类工作匹配度一般。"
+      "submission": {
+        "pageLimit": "以官网为准",
+        "reviewModel": "double-blind",
+        "rebuttal": "待核实",
+        "tracks": [
+          "Main Track",
+          "Workshop",
+          "Poster"
+        ],
+        "extra": ""
+      },
+      "acceptanceStats": {
+        "source": null,
+        "confidence": "none",
+        "note": "OpenAccept 未收录此会议，暂不填写"
+      },
+      "related": [
+        "ipsn",
+        "sensys"
+      ],
+      "tips": "CCF C 但领域内认可度可以，定位算法类工作在上面认可度不错。适合作为 IPSN/SenSys 之外的备选。",
+      "ccfByYear": [
+        {
+          "system": "CCF",
+          "year": 2022,
+          "rank": "C"
+        },
+        {
+          "system": "CCF",
+          "year": 2026,
+          "rank": "C"
+        }
+      ]
     },
     {
       "id": "ndss",
       "name": "Network and Distributed System Security Symposium",
       "shortName": "NDSS",
-      "fullName": "NDSS",
-      "rank": "领域重要",
-      "ccf": "A",
       "type": "conference",
-      "tags": ["ubiquitous", "iot-sensing"],
-      "description": "CCF A 网络安全顶会。无线感知涉及隐私泄露、侧信道攻击时，投这里影响力极大。",
+      "rank": "领域重要",
+      "tags": [
+        "privacy",
+        "ubiquitous"
+      ],
       "link": "https://www.ndss-symposium.org/",
-      "timeline": { "cycle": "每年 2 月", "months": "提前 7 个月征稿", "bufferMonths": 1 },
+      "dblp": "https://dblp.uni-trier.de/db/conf/ndss/",
+      "founded": 1994,
+      "frequency": "每年 2 月",
+      "organizer": "Internet Society (ISOC)",
+      "ccf": "A",
+      "description": "CCF A 网络安全顶会。无线感知涉及隐私泄露、侧信道攻击时，投这里影响力极大。",
+      "values": {
+        "hci": 1,
+        "sensing": 2,
+        "systems": 4,
+        "mobile": 2,
+        "hardware": 3,
+        "theory": 5
+      },
+      "valuesNote": "安全视角。无线感知是近年热点方向——CSI 侧信道、无设备感知的隐私风险是活跃议题。纯感知算法工作不适合。",
+      "timeline": {
+        "cycle": "每年 2 月",
+        "months": "提前 7 个月征稿",
+        "bufferMonths": 1
+      },
       "history": [
-        { "year": 2026, "paper": "2025-07-25", "notification": "2025-12-15" }
+        {
+          "year": 2026,
+          "paper": "2025-07-25",
+          "notification": "2025-12-15"
+        }
       ],
       "deadlines": [],
-      "tips": "如果工作涉及用 CSI 做隐私推断、或感知系统的攻击面，这是主要出口。纯感知算法工作不适合。"
+      "submission": {
+        "pageLimit": "以官网为准",
+        "reviewModel": "double-blind",
+        "rebuttal": "有",
+        "tracks": [
+          "Main Track",
+          "Workshops"
+        ],
+        "extra": "两个轮次提交，间隔约 4 个月"
+      },
+      "acceptanceStats": {
+        "source": "openaccept",
+        "confidence": "high",
+        "lastVerified": "2026-10-06",
+        "note": "2025 投稿量翻倍（1311 vs 2024 的 682），竞争明显加剧",
+        "history": [
+          {
+            "year": 2025,
+            "submitted": 1311,
+            "accepted": 211,
+            "rate": 16.09
+          },
+          {
+            "year": 2024,
+            "submitted": 682,
+            "accepted": 140,
+            "rate": 20.53
+          },
+          {
+            "year": 2023,
+            "submitted": 574,
+            "accepted": 94,
+            "rate": 16.38
+          },
+          {
+            "year": 2022,
+            "submitted": 513,
+            "accepted": 83,
+            "rate": 16.18
+          },
+          {
+            "year": 2021,
+            "submitted": 573,
+            "accepted": 87,
+            "rate": 15.18
+          },
+          {
+            "year": 2020,
+            "submitted": 506,
+            "accepted": 88,
+            "rate": 17.39
+          }
+        ]
+      },
+      "related": [
+        "ubicomp",
+        "percom"
+      ],
+      "tips": "如果工作涉及用 CSI 做隐私推断、或感知系统的攻击面，这是主要出口。2025 年投稿量翻倍是重要信号——这个方向正在变热。",
+      "ccfByYear": [
+        {
+          "system": "CCF",
+          "year": 2022,
+          "rank": "A"
+        },
+        {
+          "system": "CCF",
+          "year": 2026,
+          "rank": "A"
+        }
+      ]
     }
   ],
   "journals": [
@@ -173,115 +923,277 @@
       "id": "tosn",
       "name": "ACM Transactions on Sensor Networks",
       "shortName": "TOSN",
-      "publisher": "ACM",
+      "type": "journal",
       "rank": "领域顶刊",
+      "tags": [
+        "iot-sensing",
+        "wireless-network",
+        "localization"
+      ],
+      "link": "https://dl.acm.org/journal/tosn",
+      "dblp": "https://dblp.uni-trier.de/db/journals/tosn/",
+      "publisher": "ACM",
       "ccf": "B",
       "cas": "一区",
       "if": "4.6",
-      "tags": ["iot-sensing", "wireless-network", "localization"],
       "openAccess": "hybrid",
       "apc": "约 2600 美元",
       "reviewCycle": "首次决定约 3-6 个月",
-      "description": "传感器网络领域顶级期刊，CCF B。传感器系统的理论和方法论工作主要出口。",
-      "link": "https://dl.acm.org/journal/tosn",
-      "history": [],
-      "deadlines": [],
-      "tips": "注意该刊与 SenSys/IPSN 有紧密关系，部分会议优秀工作会被邀请扩展投这里。"
+      "frequency": "每年 8 期",
+      "values": {
+        "hci": 1,
+        "sensing": 5,
+        "systems": 4,
+        "mobile": 2,
+        "hardware": 4,
+        "theory": 5
+      },
+      "valuesNote": "传感器网络的理论和方法论出口。SenSys/IPSN 的优秀工作常被邀请扩展投这里。",
+      "acceptanceStats": {
+        "source": null,
+        "confidence": "none",
+        "note": "期刊录用率通常不公开"
+      },
+      "related": [
+        "sensys",
+        "ipsn",
+        "tmc"
+      ],
+      "tips": "与 SenSys / IPSN 有紧密关系。会议优秀工作被邀请扩展是常见路径。",
+      "ccfByYear": [
+        {
+          "system": "CCF",
+          "year": 2022,
+          "rank": "B"
+        }
+      ]
     },
     {
       "id": "imwut-j",
-      "name": "Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies (Journal)",
+      "name": "Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies",
       "shortName": "IMWUT",
-      "publisher": "ACM",
+      "type": "journal",
       "rank": "领域顶刊",
+      "tags": [
+        "ubiquitous",
+        "har",
+        "wifi-sensing"
+      ],
+      "link": "https://dl.acm.org/journal/imwut",
+      "dblp": "https://dblp.uni-trier.de/db/journals/imwut/",
+      "publisher": "ACM",
       "ccf": "B",
       "cas": "一区",
       "if": "4.6",
-      "tags": ["ubiquitous", "har", "wifi-sensing"],
       "openAccess": "hybrid",
       "apc": "约 2600 美元",
       "reviewCycle": "首轮决定约 2-3 个月",
-      "description": "UbiComp 的期刊形态，季刊。对无线感知、人体活动识别这类工作的容忍度和接受度都很高。",
-      "link": "https://dl.acm.org/journal/imwut",
-      "history": [],
-      "deadlines": [],
-      "tips": "评审相对快（2-3 个月首轮），适合需要较快反馈的场景。也可先投会议版再扩展投此刊。"
+      "frequency": "每年 4 期",
+      "values": {
+        "hci": 5,
+        "sensing": 4,
+        "systems": 3,
+        "mobile": 4,
+        "hardware": 3,
+        "theory": 3
+      },
+      "valuesNote": "与 UbiComp 同一出版方，主题一致但评审独立。对无线感知的容忍度和接受度都较高。",
+      "acceptanceStats": {
+        "source": null,
+        "confidence": "none",
+        "note": "期刊录用率通常不公开"
+      },
+      "related": [
+        "ubicomp",
+        "imwut"
+      ],
+      "tips": "首轮 2-3 个月是本领域最快的反馈周期之一。时间紧时优先考虑。",
+      "ccfByYear": [
+        {
+          "system": "CCF",
+          "year": 2022,
+          "rank": "B"
+        }
+      ]
     },
     {
       "id": "tmc",
       "name": "IEEE Transactions on Mobile Computing",
       "shortName": "TMC",
-      "publisher": "IEEE",
+      "type": "journal",
       "rank": "领域顶刊",
+      "tags": [
+        "mobile-systems",
+        "ubiquitous",
+        "embedded"
+      ],
+      "link": "https://www.computer.org/csdl/journal/tm",
+      "dblp": "https://dblp.uni-trier.de/db/journals/tmc/",
+      "publisher": "IEEE",
       "ccf": "A",
       "cas": "二区",
       "if": "5.4",
-      "tags": ["mobile-systems", "ubiquitous", "embedded"],
       "openAccess": "hybrid",
       "apc": "约 2400 美元",
       "reviewCycle": "首次决定约 5-8 个月",
-      "description": "移动计算领域顶级期刊，CCF A。移动感知系统与算法结合的工作适合。",
-      "link": "https://www.computer.org/csdl/journal/tm",
-      "history": [],
-      "deadlines": [],
-      "tips": "审稿周期长，做好被拒后转投其他刊的时间规划。系统+算法的完整工作更有竞争力。"
+      "frequency": "每年 12 期",
+      "values": {
+        "hci": 2,
+        "sensing": 3,
+        "systems": 5,
+        "mobile": 5,
+        "hardware": 3,
+        "theory": 4
+      },
+      "valuesNote": "移动计算顶刊。系统与算法结合的完整工作更有竞争力，纯感知应用偏弱。",
+      "acceptanceStats": {
+        "source": null,
+        "confidence": "none",
+        "note": "期刊录用率通常不公开"
+      },
+      "related": [
+        "mobisys",
+        "imwut-j",
+        "tosn"
+      ],
+      "tips": "审稿周期长（5-8 个月），要做被拒后转投的时间规划。CCF A 但中科院二区。",
+      "ccfByYear": [
+        {
+          "system": "CCF",
+          "year": 2022,
+          "rank": "A"
+        }
+      ]
     },
     {
-      "id": "tws",
+      "id": "twc",
       "name": "IEEE Transactions on Wireless Communications",
       "shortName": "TWC",
-      "publisher": "IEEE",
+      "type": "journal",
       "rank": "领域顶刊",
+      "tags": [
+        "wireless-network",
+        "signal-processing",
+        "localization"
+      ],
+      "link": "https://www.comsoc.org/publications/journals/twc",
+      "dblp": "https://dblp.uni-trier.de/db/journals/twc/",
+      "publisher": "IEEE",
       "ccf": "A",
       "cas": "一区",
       "if": "5.2",
-      "tags": ["wireless-network", "signal-processing", "localization"],
       "openAccess": "hybrid",
       "apc": "约 2400 美元",
       "reviewCycle": "首次决定约 4-6 个月",
-      "description": "无线通信领域顶级期刊，CCF A。涉及无线感知信号处理理论创新的工作适合投这里。",
-      "link": "https://www.comsoc.org/publications/journals/twc",
-      "history": [],
-      "deadlines": [],
-      "tips": "偏通信理论，纯应用型感知工作命中率低。需要有通信侧的创新点（如波形设计、资源分配）。"
+      "frequency": "每年 12 期",
+      "values": {
+        "hci": 1,
+        "sensing": 2,
+        "systems": 3,
+        "mobile": 3,
+        "hardware": 3,
+        "theory": 5
+      },
+      "valuesNote": "偏通信理论。纯应用型感知工作命中率低，需要有通信侧创新（波形设计、资源分配等）。",
+      "acceptanceStats": {
+        "source": null,
+        "confidence": "none",
+        "note": "期刊录用率通常不公开"
+      },
+      "related": [
+        "ipsn",
+        "mass"
+      ],
+      "tips": "CCF A + 中科院一区，是无线感知方向理论工作的天花板。但要求通信侧的理论创新，纯感知应用不合适。",
+      "ccfByYear": [
+        {
+          "system": "CCF",
+          "year": 2022,
+          "rank": "A"
+        }
+      ]
     },
     {
       "id": "jsen",
       "name": "IEEE Sensors Journal",
       "shortName": "IEEE Sensors J",
-      "publisher": "IEEE",
+      "type": "journal",
       "rank": "主流期刊",
+      "tags": [
+        "mmwave-radar",
+        "signal-processing",
+        "embedded"
+      ],
+      "link": "https://ieee-sensors.org/ieee-sensors-journal/",
+      "dblp": "https://dblp.uni-trier.de/db/journals/sensj/",
+      "publisher": "IEEE",
       "ccf": null,
       "cas": "二区",
       "if": "4.3",
-      "tags": ["mmwave-radar", "signal-processing", "embedded"],
       "openAccess": "hybrid",
       "apc": "约 2400 美元",
       "reviewCycle": "首次决定约 3-5 个月",
-      "description": "传感器领域主流期刊，毫米波雷达实测类工作接受度高，审稿务实。",
-      "link": "https://ieee-sensors.org/ieee-sensors-journal/",
-      "history": [],
-      "deadlines": [],
-      "tips": "组内投稿最稳妥的期刊选择。实测数据完整的话命中率较高，注意版面费预算。"
+      "frequency": "每月15 期",
+      "values": {
+        "hci": 1,
+        "sensing": 5,
+        "systems": 3,
+        "mobile": 2,
+        "hardware": 5,
+        "theory": 2
+      },
+      "valuesNote": "传感器领域务实取向。毫米波雷达实测类工作接受度高，系统创新不如算法创新看重。",
+      "acceptanceStats": {
+        "source": null,
+        "confidence": "none",
+        "note": "期刊录用率通常不公开"
+      },
+      "related": [
+        "twc",
+        "tmc"
+      ],
+      "tips": "组内投稿最稳妥的期刊。实测数据完整的话命中率较高，需提前确认版面费预算。",
+      "ccfByYear": []
     },
     {
       "id": "tcadh",
       "name": "IEEE Transactions on Computational Social Systems",
       "shortName": "TCADH",
-      "publisher": "IEEE",
+      "type": "journal",
       "rank": "主流期刊",
+      "tags": [
+        "har",
+        "ubiquitous"
+      ],
+      "link": "https://www.computer.org/csdl/journal/sc",
+      "dblp": "https://dblp.uni-trier.de/db/journals/tcadh/",
+      "publisher": "IEEE",
       "ccf": null,
       "cas": "三区",
       "if": "2.5",
-      "tags": ["har", "ubiquitous"],
       "openAccess": "hybrid",
       "apc": "约 2400 美元",
       "reviewCycle": "首次决定约 2-4 个月",
-      "description": "计算社交系统方向期刊，涉及群体行为感知、社交计算类工作时可考虑。",
-      "link": "https://www.computer.org/csdl/journal/sc",
-      "history": [],
-      "deadlines": [],
-      "tips": "分区偏低，适合作为毕业前的时间兜底选项，不适合作为主要成果。"
+      "frequency": "每年 4 期",
+      "values": {
+        "hci": 4,
+        "sensing": 3,
+        "systems": 2,
+        "mobile": 2,
+        "hardware": 1,
+        "theory": 3
+      },
+      "valuesNote": "社交与群体行为计算方向。涉及群体活动感知、社交计算类工作时可考虑。",
+      "acceptanceStats": {
+        "source": null,
+        "confidence": "none",
+        "note": "期刊录用率通常不公开"
+      },
+      "related": [
+        "ubicomp"
+      ],
+      "tips": "分区偏低，适合作为毕业前的时间兜底，不适合作为主要成果。审稿 2-4 个月较快。",
+      "ccfByYear": []
     }
   ]
 }

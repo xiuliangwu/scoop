@@ -1,0 +1,78 @@
+{
+  "_meta": {
+    "note": "研究领域 → 子主题 → 关联 Venue 的三层结构。Explore 页面的数据源。",
+    "lastUpdated": "2026-10-06"
+  },
+  "areas": [
+    {
+      "id": "wireless-sensing",
+      "name": "无线感知",
+      "enName": "Wireless Sensing",
+      "color": "blue",
+      "summary": "用射频信号感知物理世界与人体状态，不依赖佩戴设备或摄像头。",
+      "topics": [
+        { "id": "wifi-sensing", "name": "WiFi / CSI 感知", "desc": "利用 WiFi 信道状态信息做无设备人体感知" },
+        { "id": "mmwave-radar", "name": "毫米波雷达感知", "desc": "FMCW 雷达点云、雷达微多普勒、雷达感知呼吸心跳" },
+        { "id": "device-free", "name": "无设备感知", "desc": "设备无关的被动感知，PerCom 的传统强项" },
+        { "id": "rf-sensing", "name": "通用射频感知", "desc": "UWB、RFID、LoRa 等其他射频媒介的感知应用" },
+        { "id": "localization", "name": "定位与追踪", "desc": "室内定位、人员追踪、目标定位" }
+      ],
+      "venueIds": ["percom", "sensys", "ipsn", "ubicomp", "imwut", "tmc", "tosn", "mass"]
+    },
+    {
+      "id": "ubiquitous-computing",
+      "name": "普适计算",
+      "enName": "Ubiquitous Computing",
+      "color": "purple",
+      "summary": "计算隐入环境，设备从显式工具变为随时可用的基础设施。",
+      "topics": [
+        { "id": "context-awareness", "name": "情境感知", "desc": "环境与用户状态的建模、推理与自适应" },
+        { "id": "smart-environment", "name": "智能环境", "desc": "智能家居、智能空间、环境感知系统" },
+        { "id": "wearable", "name": "可穿戴计算", "desc": "智能手表、穿戴设备、纺织与柔性电子" },
+        { "id": "health-sensing", "name": "健康感知", "desc": "非接触生理监测、慢病管理、心理状态识别" },
+        { "id": "privacy", "name": "感知隐私", "desc": "侧信道、隐私泄露攻击与防护" }
+      ],
+      "venueIds": ["ubicomp", "imwut", "percom", "ndss", "tmc"]
+    },
+    {
+      "id": "mobile-systems",
+      "name": "移动系统",
+      "enName": "Mobile Systems",
+      "color": "amber",
+      "summary": "移动设备上的系统级设计，关注性能、能耗与真实部署。",
+      "topics": [
+        { "id": "on-device-ai", "name": "端侧智能", "desc": "在手机和嵌入式设备上部署推理模型" },
+        { "id": "system-design", "name": "系统设计", "desc": "移动系统的架构与性能优化" },
+        { "id": "cross-device", "name": "跨设备协同", "desc": "多设备联动与群体感知" }
+      ],
+      "venueIds": ["mobisys", "ubicomp", "imwut", "percom", "tmc"]
+    },
+    {
+      "id": "iot-systems",
+      "name": "物联网与传感系统",
+      "enName": "IoT & Sensor Systems",
+      "color": "coral",
+      "summary": "传感器网络与物联网的系统实现，强调真实部署与长期运行。",
+      "topics": [
+        { "id": "sensor-network", "name": "传感器网络", "desc": "网络协议、路由、能量管理" },
+        { "id": "edge-inference", "name": "边缘推理", "desc": "感知任务的端侧与边缘侧计算" },
+        { "id": "real-deployment", "name": "真实部署", "desc": "实际环境中的系统落地与验证" },
+        { "id": "embedded", "name": "嵌入式实现", "desc": "软硬件协同、实时性、平台适配" }
+      ],
+      "venueIds": ["sensys", "ipsn", "mass", "tosn", "jsen"]
+    },
+    {
+      "id": "signal-processing",
+      "name": "信号处理",
+      "enName": "Signal Processing",
+      "color": "gray",
+      "summary": "感知信号的理论与方法基础，跨无线感知和雷达系统的公共底座。",
+      "topics": [
+        { "id": "radar-dsp", "name": "雷达信号处理", "desc": "点云处理、目标检测、杂波抑制" },
+        { "id": "estimation", "name": "参数估计", "desc": "到达时间、角度、距离估计" },
+        { "id": "waveform", "name": "波形设计", "desc": "FMCW 参数优化、波形与资源联合设计" }
+      ],
+      "venueIds": ["twc", "jsen", "tmc", "tosn"]
+    }
+  ]
+}
