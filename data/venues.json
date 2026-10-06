@@ -956,6 +956,225 @@
       "tips": "注意三个和别的会议不同的地方：①2023 起改成双周期，Winter 轮约在次年 1-2 月，具体看官网；②rebuttal 只有 500 词且**明确禁止补新实验或新数据**，只能澄清事实错误和回答提问，所以实验必须在投稿前做扎实；③被拒后 11 个月内不能重投 MobiCom，要转投其他会议。One-Shot Revision 是二次机会但不是录用保证 —— 评审会给出最多 3 条修改点，改完按是否回应来判断。"
     },
     {
+      "id": "infocom",
+      "name": "IEEE INFOCOM",
+      "shortName": "INFOCOM",
+      "type": "conference",
+      "rank": "领域旗舰",
+      "tags": [
+        "wireless-network",
+        "signal-processing",
+        "localization"
+      ],
+      "link": "https://infocom2027.ieee-infocom.org/",
+      "dblp": "https://dblp.uni-trier.de/db/conf/infocom/",
+      "founded": 1980,
+      "frequency": "每年 5 月",
+      "organizer": "IEEE Communications Society",
+      "ccfByYear": [
+        {
+          "system": "CCF",
+          "year": 2022,
+          "rank": "A"
+        },
+        {
+          "system": "CCF",
+          "year": 2026,
+          "rank": "A"
+        },
+        {
+          "system": "ICORE",
+          "year": 2026,
+          "rank": "A*"
+        }
+      ],
+      "description": "IEEE 通信学会旗舰网络会议，CCF A 类。覆盖通信与数据网络的全栈理论与系统研究。2027 征稿明确包含 mmWave/THz 通信、Mobile sensing and applications、Localization and location-based services、Network measurement and analysis 等议题，无线感知工作有对口入口但整体偏通信理论。",
+      "values": {
+        "hci": 1,
+        "sensing": 3,
+        "systems": 3,
+        "mobile": 3,
+        "hardware": 2,
+        "theory": 5
+      },
+      "valuesNote": "理论导向最强的一个。征稿范围虽含 mobile sensing、localization、network measurement，但评审普遍期待有通信侧的实质贡献（协议设计、资源分配、理论分析、性能界），纯感知算法或系统实现命中率低。若工作核心是信号处理而非网络，建议优先考虑 MobiCom 或 TWC。",
+      "editions": [
+        {
+          "year": 2027,
+          "link": "https://infocom2027.ieee-infocom.org/",
+          "accepted": true,
+          "timezone": "AoE",
+          "place": "Honolulu, Hawaii, USA",
+          "conferenceDate": "May 24-27, 2027",
+          "submissions": [
+            {
+              "round": "Main",
+              "abstract": "2026-07-24",
+              "paper": "2026-07-31"
+            }
+          ],
+          "timeline": [
+            {
+              "type": "notification",
+              "date": "2026-10-09",
+              "comment": "Early-Reject 通知"
+            },
+            {
+              "type": "notification",
+              "date": "2026-12-08",
+              "comment": "录用通知"
+            }
+          ]
+        }
+      ],
+      "submission": {
+        "pageLimit": "IEEE conference 模板常规长度（双栏）",
+        "reviewModel": "double-blind",
+        "rebuttal": "待核实",
+        "tracks": [
+          "Main Conference / Full Paper",
+          "Workshop",
+          "Short Paper"
+        ],
+        "extra": "摘要与全文截稿相隔 7 天，**摘要阶段就要注册并提交完整信息**。录用论文发表于 IEEE INFOCOM 2027 Proceedings 与 IEEE Xplore。模板与投稿要求见官网。"
+      },
+      "acceptanceStats": {
+        "status": "complete",
+        "source": "openaccept",
+        "confidence": "high",
+        "lastVerified": "2026-10-06",
+        "note": "主赛道数据。录用率长期稳定在 17–21%，但投稿量巨大（2026 年 1740篇）。",
+        "history": [
+          {
+            "year": 2026,
+            "submitted": 1740,
+            "accepted": 329,
+            "rate": 18.91
+          },
+          {
+            "year": 2025,
+            "submitted": 1458,
+            "accepted": 272,
+            "rate": 18.66
+          },
+          {
+            "year": 2024,
+            "submitted": 1307,
+            "accepted": 256,
+            "rate": 19.59
+          },
+          {
+            "year": 2023,
+            "submitted": 1312,
+            "accepted": 252,
+            "rate": 19.21
+          },
+          {
+            "year": 2022,
+            "submitted": 1129,
+            "accepted": 224,
+            "rate": 19.84
+          },
+          {
+            "year": 2021,
+            "submitted": 1271,
+            "accepted": 251,
+            "rate": 19.75
+          },
+          {
+            "year": 2020,
+            "submitted": 1397,
+            "accepted": 267,
+            "rate": 19.11
+          },
+          {
+            "year": 2019,
+            "submitted": 1464,
+            "accepted": 288,
+            "rate": 19.67
+          },
+          {
+            "year": 2018,
+            "submitted": 1609,
+            "accepted": 308,
+            "rate": 19.14
+          },
+          {
+            "year": 2017,
+            "submitted": 1395,
+            "accepted": 292,
+            "rate": 20.93
+          },
+          {
+            "year": 2016,
+            "submitted": 1644,
+            "accepted": 300,
+            "rate": 18.25
+          },
+          {
+            "year": 2015,
+            "submitted": 1640,
+            "accepted": 316,
+            "rate": 19.27
+          },
+          {
+            "year": 2014,
+            "submitted": 1650,
+            "accepted": 319,
+            "rate": 19.33
+          },
+          {
+            "year": 2013,
+            "submitted": 1613,
+            "accepted": 279,
+            "rate": 17.3
+          }
+        ],
+        "coverage": {
+          "from": 2013,
+          "to": 2026,
+          "years": 14
+        }
+      },
+      "relations": {
+        "similar": [
+          {
+            "id": "mobicom",
+            "why": "同为网络方向旗舰，MobiCom 更偏移动与感知系统，INFOCOM 更偏通信理论与协议"
+          },
+          {
+            "id": "twc",
+            "why": "TWC 是期刊出口，理论要求与 INFOCOM 接近"
+          }
+        ],
+        "alternative": [
+          {
+            "id": "mobicom",
+            "why": "无线感知工作通常 MobiCom 比 INFOCOM 更对口"
+          },
+          {
+            "id": "percom",
+            "why": "无设备感知可投 PerCom，评审对感知工作的接受度更高"
+          },
+          {
+            "id": "ipsn",
+            "why": "传感网协议与网络设计，理论要求与 INFOCOM 接近但受众更对口"
+          }
+        ],
+        "related": [
+          {
+            "id": "mass",
+            "why": "定位与网络算法，MASS 更偏移动自组织"
+          },
+          {
+            "id": "tmc",
+            "why": "移动计算方向期刊，理论工作可扩展投 TMC"
+          }
+        ]
+      },
+      "tips": "2027 截稿已过（7 月 31 日 AoE），下一届看 2028 官网。摘要与全文只差 7 天，不要以为可以只交全文。录用率看着稳定在 19% 左右，但投稿量 1700+ 篇意味着评审池很大，工作要靠明确的理论贡献脱颖而出。如果你的工作核心是感知算法而非通信机制，先认真考虑 MobiCom —— 后者的评审对感知工作的接受度高得多。"
+    },
+    {
       "id": "mobisys",
       "name": "ACM International Conference on Mobile Systems, Applications, and Services",
       "shortName": "MobiSys",

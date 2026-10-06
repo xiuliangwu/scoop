@@ -40,6 +40,7 @@
       "venueIds": [
         "imwut",
         "imwut-j",
+        "infocom",
         "ipsn",
         "mass",
         "mobicom",
@@ -47,6 +48,7 @@
         "sensys",
         "tmc",
         "tosn",
+        "twc",
         "ubicomp"
       ]
     },
@@ -120,6 +122,7 @@
       "venueIds": [
         "imwut",
         "imwut-j",
+        "infocom",
         "mobicom",
         "mobisys",
         "percom",
@@ -156,6 +159,7 @@
         }
       ],
       "venueIds": [
+        "infocom",
         "ipsn",
         "jsen",
         "mass",
@@ -189,6 +193,7 @@
       "venueIds": [
         "imwut",
         "imwut-j",
+        "infocom",
         "jsen",
         "mobicom",
         "tmc",

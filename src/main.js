@@ -2,6 +2,7 @@ import './style.css'
 import venuesRaw from '../data/venues.json'
 import reportsRaw from '../data/reports.json'
 import areasRaw from '../data/areas.json'
+import termsRaw from '../data/terms.json'
 
 const VENUES = [...venuesRaw.conferences, ...venuesRaw.journals]
 const CONFS = venuesRaw.conferences
@@ -539,6 +540,20 @@ function profileView(venueId) {
 }
 
 /* ---------- 新手指南 ---------- */
+// 快速上手：五步走完整个站点，每步标注对应页面入口
+const ONBOARD = [
+  { t: '明确你的方向', d: '从研究领域出发，看看这个领域主要往哪些会议和期刊投稿', tab: 'explore', btn: '去「领域」' },
+  { t: '缩小候选范围', d: '用标签筛选挑出 3–5 个，再并排对比找出真正适合的', tab: 'compare', btn: '去「对比」' },
+  { t: '确认时间窗口', d: '查看各会议的下一个投稿节点，倒推自己的内部 deadline', tab: 'home', btn: '去「截止」' },
+  { t: '深入了解单个 venue', d: '看录用率趋势、完整投稿周期、组内经验与关联会议', tab: 'venues', btn: '去「Venue」' },
+  { t: '记录与共建', d: '投出后到战报登记；发现信息有误就提 PR 修正', tab: 'reports', btn: '去「战报」' }
+]
+
+const TERM_COUNT = termsRaw.groups.reduce((s, g) => s + g.terms.length, 0)
+
+// 术语定义里用 ** 标记重点，渲染成粗体
+const inlineBold = s => esc(s).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
+
 function startView() {
   // 可折叠步骤：默认展开第1 步，其余收起
   const steps = [
@@ -720,6 +735,7 @@ function startView() {
     { name: 'UbiComp', cycle: '5–6 个月', rebuttal: true, note: '三轮滚动征稿' },
     { name: 'PerCom', cycle: '约 3 个月', rebuttal: true, note: '有早期拒稿机制' },
     { name: 'MobiCom', cycle: '约 2.5 个月（含 rebuttal）', rebuttal: true, note: '双周期，禁补实验' },
+    { name: 'INFOCOM', cycle: '约 4 个月', rebuttal: false, note: '投稿量极大，理论导向' },
     { name: 'MobiSys', cycle: '约 3 个月', rebuttal: false, note: '近年录用率收紧' },
     { name: 'SenSys', cycle: '3–4 个月', rebuttal: false, note: '录用率稳定' },
     { name: 'IPSN', cycle: '待核实', rebuttal: false, note: '' },
@@ -746,12 +762,26 @@ function startView() {
      '会。不同年份、不同 track 差异很大，有些数字是社区整理的。本站已标注每个数字的来源和核对日期，请结合自己的判断。'],
     ['站上的信息多久更新一次？',
      '截稿日期每季度核对，CCF 分级每年更新（中科院分区通常年末调整），录用率不定期补充。页脚显示最后更新时间。'],
-    ['为什么某些会议显示「未收录」？',
-     '表示已核对但未找到可靠的公开录用统计。不同来源数据冲突时我们不展示，宁可留空也不用估算值。'],
     ['组内 review 一般提前多久？',
      '建议投稿前至少 5 天把完整稿发给导师和两位同门，留出改稿时间。详见「领域」页的组内协作说明。'],
     ['我发现的信息有错怎么办？',
-     '直接在 GitHub 仓库提 PR 即可，或发给维护者。发现错就改，这是共建。']
+     '直接在 GitHub 仓库提 PR 即可，或发给维护者。发现错就改，这是共建。'],
+    ['CCF、ICORE、QUALIS 有什么区别？为什么同一个会查到三个不同等级？',
+     '三套体系的口径和目标不同：CCF 是国内推荐（求职考核最认），ICORE 是英国计算机学会（AIMCS）排名，QUALIS 是西班牙研究委员会。**这不是数据错误，是评价视角不同**。本站并列展示，方便你按需要的场景选一个参考。'],
+    ['为什么有些会议显示「未收录」，这代表它很难投吗？',
+     '不代表。「未收录」表示我们已核对但没找到可靠的公开录用统计（OpenAccept、CCFDDL 等数据库均无记录）。有些会议根本不公开录用率，有些只在小页面公布。**本站不用估算值填充**，宁可留空也不误导。'],
+    ['AoE 时区怎么换算成北京时间？',
+     'AoE = UTC-12，比北京时间（UTC+8）晚 20 小时。所以「23:59 AoE」= 北京时间次日 11:59（夏令时期间 12:59）。**这是最宽松的时区表述**，多数会议用 AoE，不必自己换算，但提前提交总没错。'],
+    ['价值维度的评分是谁给的？准吗？',
+     '是**编辑解读**，不是官方数据。我们基于各会议的征稿范围和历年录用论文的倾向给出，用于快速横向比较。**不宜当作结论** —— 维度打分只回答「大体倾向」，具体匹配度还要看组内经验和论文本身。'],
+    ['MobiCom 的 one-shot revision 算录用吗？',
+     '不算，但也不是拒稿。它是介于两者之间的第三种结果：评审给出最多 3 条修改点，按要求改完再决定是否录用。**改完仍可能被拒**。相比直接拒稿，这是多了一次机会。'],
+    ['Workshop 论文能算成果吗？',
+     '**通常不收录进正式 proceedings**，算成果时需确认清楚。Workshop 篇幅短、评审宽松，适合主会被拒后的快速止损，或已有工作的补充曝光。毕业要求通常只认主会或期刊。'],
+    ['我该按 CCF 还是中科院分区选期刊？',
+     '看你的实际约束：**国内求职和毕业要求通常认 CCF**；**评职称、申请基金时中科院分区权重更高**。本站两者并列展示，方便按场景判断。'],
+    ['组内没有往届数据，我该怎么判断匹配度？',
+     '三个信号：①Venue 页的「价值维度」看你的贡献类型是否在该会的强项；②「关联 venue」里的 Alternative 栏 —— 如果几个会议都把你这类工作列为替代选项，说明定位清楚；③录用率趋势 —— 稳定在 20% 左右且多年波动小的会议，相对可预测。']
   ]
 
   return `
@@ -762,8 +792,50 @@ function startView() {
 
   <div class="banner">
     <b>使用建议</b>
-    <span>首次投稿建议按顺序读一遍；已有经验可直接跳到关心的步骤。数据更新于 ${META.lastUpdated}，具体要求以各会议官网 CFP 为准。</span>
+    <span>第一次来：先看下面的「快速上手」和「术语速查」；已有投稿经验可直接跳到「投稿全流程」。数据更新于 ${META.lastUpdated}，具体要求以各会议官网 CFP 为准。</span>
   </div>
+
+  <section>
+    <div class="sec-head">
+      <h2>快速上手</h2>
+      <span class="hint">第一次使用本站，按这五步走</span>
+    </div>
+    <div class="onboard">
+      ${ONBOARD.map((o, i) => `
+      <div class="ob-card">
+        <div class="ob-n">${i + 1}</div>
+        <div class="ob-t">${esc(o.t)}</div>
+        <div class="ob-d">${esc(o.d)}</div>
+        <button class="ob-go" data-tab="${o.tab}">${esc(o.btn)} →</button>
+      </div>`).join('')}
+    </div>
+    <div class="src-note" style="margin-top:10px">不确定该投哪个会议？先用<a href="#" data-tab="compare">对比页</a>挑 2–4 个候选并排看，比一个个翻快得多。</div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>术语速查</h2>
+      <span class="hint">${TERM_COUNT} 条 · 投稿前扫一遍能省很多困惑</span>
+    </div>
+    <div class="term-groups">
+      ${termsRaw.groups.map(g => `
+      <details class="term-group" ${g.id === 'ranking' ? 'open' : ''}>
+        <summary>
+          <span class="tg-name">${esc(g.name)}</span>
+          <span class="tg-count">${g.terms.length}</span>
+          <span class="tg-desc">${esc(g.desc)}</span>
+        </summary>
+        <dl class="terms">
+          ${g.terms.map(t => `
+          <div class="term">
+            <dt>${esc(t.t)}</dt>
+            <dd>${inlineBold(t.d)}${t.where && t.where !== '—'
+              ? '<span class="term-where">站内位置：' + esc(t.where) + '</span>' : ''}</dd>
+          </div>`).join('')}
+        </dl>
+      </details>`).join('')}
+    </div>
+  </section>
 
   <section>
     <div class="sec-head">
@@ -829,7 +901,7 @@ function startView() {
       ${faqs.map(([q, a], i) => `
       <details class="faq">
         <summary><span class="faq-q">${esc(q)}</span></summary>
-        <div class="step-body" style="padding-left:0">${esc(a)}</div>
+        <div class="step-body" style="padding-left:0">${inlineBold(a)}</div>
       </details>`).join('')}
     </div>
   </section>`

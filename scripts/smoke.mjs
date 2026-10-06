@@ -129,6 +129,23 @@ if (guideTab) {
   console.log('格式速查表行:', document.querySelectorAll('table.data tbody tr').length)
   console.log('时间线节点  :', document.querySelectorAll('.timeline-list li').length)
   console.log('review 清单 :', document.querySelectorAll('.check-list li').length)
+  // 快速上手
+  console.log('上手卡片    :', document.querySelectorAll('.ob-card').length)
+  console.log('  带跳转按钮:', document.querySelectorAll('.ob-go').length)
+  // 术语速查
+  console.log('术语分组    :', document.querySelectorAll('.term-group').length)
+  const tCount = document.querySelectorAll('.term').length
+  console.log('术语条目    :', tCount)
+  document.querySelectorAll('details.term-group').forEach(d => { d.open = true })
+  const termLen = [...document.querySelectorAll('.term dd')]
+    .map(d => d.textContent.replace(/\s+/g, ' ').trim().length)
+  console.log('术语最短/最长:', Math.min(...termLen), '/', Math.max(...termLen))
+  const noWhere = [...document.querySelectorAll('.term')]
+    .filter(t => !t.querySelector('.term-where')).length
+  console.log('缺位置提示  :', noWhere, noWhere > 0 ? '✗' : '✓')
+  const shortTerm = termLen.filter(n => n < 25).length
+  console.log('定义过短    :', shortTerm, shortTerm === 0 ? '✓' : '✗')
+  console.log('粗体渲染    :', document.querySelectorAll('.term dd b, .step-body b').length, '处')
   // 展开所有步骤看内容是否完整
   document.querySelectorAll('details.step').forEach(d => { d.open = true })
   const bodyLen = [...document.querySelectorAll('details.step .step-body')]

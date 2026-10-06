@@ -189,6 +189,41 @@ Object.entries(shortNames).forEach(([k, list]) => {
   }
 })
 
+// 14. 术语数据完整性
+const terms = JSON.parse(readFileSync(resolve(root, 'data/terms.json'), 'utf8'))
+if (!terms.groups?.length) errs.push('terms.json 缺少 groups')
+let termCount = 0
+terms.groups.forEach(g => {
+  if (!g.name) errs.push('术语分组缺 name')
+  if (!g.desc) warns.push(`术语分组「${g.name}」缺 desc`)
+  if (!g.terms?.length) { errs.push(`术语分组「${g.name}」为空`); return }
+  g.terms.forEach(t => {
+    termCount++
+    if (!t.t) errs.push(`术语分组「${g.name}」有条目缺名称`)
+    if (!t.d || t.d.length < 20) errs.push(`术语「${t.t}」定义过短（需一句话说清）`)
+    if (t.d && t.d.includes('**') && t.d.split('**').length % 2 === 0) {
+      errs.push(`术语「${t.t}」的 ** 标记未闭合`)
+    }
+  })
+})
+// 分组 id 必须唯一（渲染时用 data 属性定位）
+const gids = terms.groups.map(g => g.id)
+if (new Set(gids).size !== gids.length) errs.push('术语分组 id 重复')
+
+// 15. 快速上手的页面入口必须对应真实页签
+const src = readFileSync(resolve(root, 'src/main.js'), 'utf8')
+const TAB_KEYS = ['home', 'explore', 'venues', 'compare', 'start', 'reports', 'guide']
+const obMatch = src.match(/const ONBOARD = \[([\s\S]*?)\n\]/)
+if (!obMatch) errs.push('main.js 里找不到 ONBOARD（快速上手数据）')
+else {
+  const tabs = [...obMatch[1].matchAll(/tab:\s*'(\w+)'/g)].map(m => m[1])
+  if (!tabs.length) errs.push('ONBOARD 里没有配置任何页面入口')
+  tabs.forEach(t => {
+    if (!TAB_KEYS.includes(t)) errs.push(`ONBOARD 引用了不存在的页签 "${t}"`)
+  })
+  if (new Set(tabs).size < 3) warns.push('ONBOARD 的页面入口少于 3 个，覆盖面偏窄')
+}
+
 // 输出
 console.log('='.repeat(52))
 console.log('数据校验结果')
