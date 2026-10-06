@@ -126,14 +126,17 @@ function homeView() {
     <div class="grid c3">
       <div class="card"><div class="card-meta">已收录会议</div><div class="card-name">${venuesRaw.conferences.length} 个</div></div>
       <div class="card"><div class="card-meta">已收录期刊</div><div class="card-name">${venuesRaw.journals.length} 本</div></div>
-      <div class="card"><div class="card-meta">组内投稿记录</div><div class="card-name">${REPORTS.length} 条 · 命中 ${acc}</div></div>
+      <div class="card">
+        <div class="card-meta">组内投稿记录</div>
+        <div class="card-name">${REPORTS.length ? `${REPORTS.length} 条 · 命中 ${acc}` : '待补充'}</div>
+      </div>
     </div>
   </section>
 
   <section>
     <div class="sec-head">
       <h2>最近战报</h2>
-      <span class="hint">${sub} 条在审 · ${rej} 条已拒</span>
+      ${REPORTS.length ? `<span class="hint">${sub} 条在审 · ${rej} 条已拒</span>` : '<span class="hint">暂无记录</span>'}
     </div>
     ${reportsView()}
   </section>`
@@ -190,7 +193,12 @@ function venuesView() {
 function reportsView() {
   const list = REPORTS.filter(r => state.showPrivate || r.public)
   if (!list.length) {
-    return '<div class="empty">还没有公开的投稿记录。第一条由你来写。</div>'
+    return `<div class="empty">
+      <div class="empty-title">${REPORTS.length === 0 ? '这个板块还没有内容' : '当前视角下没有记录'}</div>
+      <p class="empty-desc">战报记录每一次投稿的审稿意见和经验总结，是组里最难得的经验沉淀。</p>
+      <p class="empty-desc">添加方式：复制 <code>data/reports.json</code> 里的 <code>_template</code> 结构，追加到 <code>reports</code> 数组，提交 PR 即可。</p>
+      ${REPORTS.length === 0 ? '<p class="empty-desc">哪怕只是写一条刚投过的记录，也是有价值的起点。</p>' : '<p class="empty-desc">切换到「包含私有记录」可查看尚未公开的内容。</p>'}
+    </div>`
   }
   return list.map(r => {
     const st = { accepted: ['已录用', 'b-green'], rejected: ['已拒稿', 'b-red'], under_review: ['在审', 'b-amber'], 'under-review': ['在审', 'b-amber'] }[r.status] || ['—', 'b-gray']
@@ -228,7 +236,7 @@ function reportsPage() {
   </div>
   <div class="banner">
     <b>关于隐私</b>
-    <span>审稿意见属未公开评审内容，默认为非公开。本页仅展示标记为公开的记录；公开部署时可在配置中关闭私有记录展示。</span>
+    <span>审稿意见属未公开评审内容，默认非公开。每条战报和每条审稿意见各有独立的 public 开关，公开部署时只展示你明确设为公开的部分。</span>
   </div>
   <div class="filters">
     <button class="chip ${!state.showPrivate ? 'on' : ''}" data-priv="0">仅公开记录</button>
@@ -268,7 +276,29 @@ function guideView() {
     <p>在 <code>tags</code> 数组里加新条目，给一个 <code>id</code>、中文名和配色。配色可选：blue / teal / amber / coral / green / purple / pink / gray。注意控制总数，建议不超过 12 个，太多反而不好选。</p>
 
     <h3>如何添加一条战报</h3>
-    <p>编辑 <code>data/reports.json</code>，在 <code>reports</code> 里追加。<code>public</code> 字段控制这条记录是否公开；<code>reviews</code> 里的每条也有独立的 <code>public</code> 开关，可以做到「结果显示但意见不公开」。</p>
+    <p>编辑 <code>data/reports.json</code>，复制其中的 <code>_template</code> 结构，追加到 <code>reports</code> 数组末尾即可。字段含义见同文件的 <code>_fieldNote</code>。</p>
+    <pre><code>{
+  "id": "r-001",
+  "member": "填写人姓名",
+  "venueName": "ICASSP",
+  "year": 2026,
+  "status": "accepted | rejected | under-review",
+  "submittedAt": "2025-09-24",
+  "decidedAt": "2026-02-20",
+  "daysElapsed": 138,
+  "title": "论文标题",
+  "reviews": [{
+    "round": 1,
+    "summary": "评审意见摘要",
+    "strengths": ["评审认可的优点"],
+    "weaknesses": ["评审指出的主要问题"],
+    "public": false
+  }],
+  "lessons": "这次投稿学到了什么",
+  "public": false
+}</code></pre>
+    <p><code>status</code> 三种取值：<code>accepted</code> 已录用 / <code>rejected</code> 已拒稿 / <code>under-review</code> 在审。在审时 <code>decidedAt</code> 和 <code>daysElapsed</code> 填 <code>null</code>。</p>
+    <p><code>public</code> 是双层开关：<code>public: false</code> 的战报在公开部署下完全不展示；即使战报公开，<code>reviews[].public: false</code> 的审稿意见仍然折叠且不渲染内容。审稿意见是未公开评审内容，默认关闭，想公开再单独打开。</p>
 
     <h3>提交流程</h3>
     <ol>

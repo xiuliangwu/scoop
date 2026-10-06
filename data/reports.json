@@ -1,72 +1,41 @@
 {
   "_meta": {
-    "note": "论文战报。public=false 的记录仅在本机/内网可见，公开部署时不展示审稿意见全文。",
-    "privacy": "审稿意见属未公开评审内容，请确认后再决定是否公开。"
+    "note": "论文战报。每条记录代表一次投稿，字段说明见各条目的 _fieldNote。",
+    "privacy": "审稿意见属未公开评审内容，public 默认 false；确认后再改为 true 才会公开展示。",
+    "howto": "复制 _template 中的结构，追加到 reports 数组末尾即可。id 需唯一，建议 r-001 递增。"
   },
-  "reports": [
-    {
-      "id": "r-001",
-      "member": "待填写",
-      "venueId": "jsen",
-      "venueName": "IEEE Sensors Journal",
-      "year": 2025,
-      "status": "accepted",
-      "round": 1,
-      "daysElapsed": 132,
-      "submittedAt": "2025-01-20",
-      "decidedAt": "2025-06-01",
-      "title": "（示例）毫米波雷达点云目标检测的实测与优化",
-      "reviews": [
-        {
-          "round": 1,
-          "summary": "评审认为工作工程实现完整，但创新性有限，建议加强与最新方法的对比。",
-          "strengths": ["实测数据详实", "系统实现完整", "消融实验充分"],
-          "weaknesses": ["与 2024 年后新方法对比不足", "缺少跨数据集验证"],
-          "public": false
-        }
-      ],
-      "lessons": "实测类论文要尽早规划对比实验，审稿人几乎一定会问「和最新的比怎么样」。",
-      "public": false
-    },
-    {
-      "id": "r-002",
-      "member": "待填写",
-      "venueId": "icassp",
-      "venueName": "ICASSP",
-      "year": 2025,
-      "status": "rejected",
-      "round": 1,
-      "daysElapsed": 138,
-      "submittedAt": "2024-09-25",
-      "decidedAt": "2025-02-20",
-      "title": "（示例）四页短文的信号处理改进方法",
-      "reviews": [
-        {
-          "round": 1,
-          "summary": "四页篇幅下方法描述过于简略，评审无法判断技术细节与可复现性。",
-          "strengths": ["问题定义清晰"],
-          "weaknesses": ["方法描述不充分", "缺少与 SOTA 的定量对比", "参考文献不足"],
-          "public": false
-        }
-      ],
-      "lessons": "ICASSP 只有四页，别把论文写成八页砍一半——方法细节必须完整，实验对比要挤进去。",
-      "public": false
-    },
-    {
-      "id": "r-003",
-      "member": "待填写",
-      "venueId": "iceit",
-      "venueName": "ICEIT",
-      "year": 2026,
-      "status": "under-review",
-      "round": 1,
-      "daysElapsed": null,
-      "submittedAt": "2025-12-05",
-      "decidedAt": null,
-      "title": "（示例）嵌入式平台上的雷达信号实时处理",
-      "reviews": [],
-      "lessons": "练手会议，审稿意见质量一般，主要价值是走通一遍投稿流程。",
-      "public": false
-    }
-  ]
+  "_template": {
+    "id": "r-001",
+    "member": "填写人姓名",
+    "venueId": "对应 venues.json 里的会议/期刊 id，如 icassp",
+    "venueName": "会议或期刊名称，如 ICASSP",
+    "year": 2026,
+    "status": "accepted | rejected | under-review",
+    "round": 1,
+    "daysElapsed": 138,
+    "submittedAt": "2025-09-24",
+    "decidedAt": "2026-02-20",
+    "title": "论文标题",
+    "reviews": [
+      {
+        "round": 1,
+        "summary": "评审意见摘要",
+        "strengths": ["评审认可的优点"],
+        "weaknesses": ["评审指出的主要问题"],
+        "public": false
+      }
+    ],
+    "lessons": "这次投稿学到了什么，写给后来人看",
+    "public": false
+  },
+  "_fieldNote": {
+    "status": "三种取值：accepted 已录用 / rejected 已拒稿 / under-review 在审",
+    "daysElapsed": "从投稿到出结果的总天数，在审时填 null",
+    "decidedAt": "出结果的日期，在审时填 null",
+    "reviews": "可有多轮（revision 后再审），按轮次依次填写；在审时留空数组",
+    "reviews[].public": "控制该条审稿意见是否公开，false 时页面上折叠且不显示内容",
+    "public": "控制整条战报是否公开。false 时公开部署下完全不展示",
+    "lessons": "经验总结，这是战报栏目最有价值的部分"
+  },
+  "reports": []
 }

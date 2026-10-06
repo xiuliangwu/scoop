@@ -259,12 +259,21 @@ ul.pts li { margin-bottom: 2px; }
 }
 
 .empty {
-  background: var(--surface-2);
+  background: var(--surface);
+  border: 1px dashed var(--border-strong);
   border-radius: var(--radius);
-  padding: 32px;
+  padding: 40px 32px;
   text-align: center;
-  color: var(--text-3);
-  font-size: 13px;
+  color: var(--text-2);
+}
+.empty-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 8px; }
+.empty-desc { font-size: 13px; margin-bottom: 6px; }
+.empty-desc:last-child { margin-bottom: 0; }
+.empty-desc code {
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 12px;
 }
 
 /* guide */

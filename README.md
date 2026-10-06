@@ -44,11 +44,14 @@ scoop/
 
 **2. 战报隐私双层开关**
 
-`reports` 条目和 `reviews` 条目各有独立的 `public` 字段。公开部署时：
+战报条目和审稿意见条目各有独立的 `public` 字段，默认全为 `false`。公开部署时：
+
 - `public: false` 的战报完全不展示
-- `public: true` 的战报展示结果，但 `reviews[].public: false` 的意见折叠且不渲染
+- 战报公开时，`reviews[].public: false` 的意见仍折叠且不渲染内容
 
 做到「结果公开、意见可控」。审稿意见是未公开评审内容，由记录本人决定是否公开。
+
+战报板块目前只保留了数据结构和功能，内容待组内逐步补充。`data/reports.json` 里的 `_template` 是可直接复制的填写模板，追加到 `reports` 数组即可；字段含义见同文件的 `_fieldNote`。
 
 **3. 领域标签控制在 12 个以内**
 
