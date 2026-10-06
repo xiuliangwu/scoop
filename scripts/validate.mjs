@@ -7,6 +7,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const venues = JSON.parse(readFileSync(resolve(root, 'data/venues.json'), 'utf8'))
 const areasData = JSON.parse(readFileSync(resolve(root, 'data/areas.json'), 'utf8'))
 const reports = JSON.parse(readFileSync(resolve(root, 'data/reports.json'), 'utf8'))
+const terms = JSON.parse(readFileSync(resolve(root, 'data/terms.json'), 'utf8'))
 
 const ALL = [...venues.conferences, ...venues.journals]
 const ids = new Set(ALL.map(v => v.id))
@@ -138,18 +139,37 @@ reports.reports.forEach(r => {
   if (r.venueId && !ids.has(r.venueId)) errs.push(`战报 ${r.id} 指向不存在的 venue "${r.venueId}"`)
 })
 
-// 9. 非 ASCII 污染（西里尔字母等）
-const checkRaw = (name, obj) => {
-  const raw = JSON.stringify(obj)
-  const bad = [...raw].filter(ch => {
+// 9. 非ASCII 污染（西里尔/希腊字母、替换字符）——
+// 写中文长文本时反复踩坑：肉眼几乎看不出，但会让 id 匹配失效或显示乱码
+const scanNonAscii = (name, obj) => {
+  const raw = typeof obj === 'string' ? obj : JSON.stringify(obj)
+  const cyrillic = [...raw].filter(ch => {
     const c = ch.codePointAt(0)
     return (c >= 0x0400 && c <= 0x04FF) || (c >= 0x0370 && c <= 0x03FF)
   })
-  if (bad.length) errs.push(`${name} 含西里尔/希腊字母: ${[...new Set(bad)].join(' ')}`)
+  if (cyrillic.length) {
+    errs.push(`${name} 含西里尔/希腊字母: ${[...new Set(cyrillic)].join(' ')}（与拉丁字母形近，易导致 id 匹配失败）`)
+  }
+  const replacement = (raw.match(/\uFFFD/g) || []).length
+  if (replacement) {
+    // 定位是哪个字段
+    let where = ''
+    if (typeof obj === 'object') {
+      const walk = (o, path) => {
+        if (typeof o === 'string') { if (o.includes('\uFFFD')) where = path }
+        else if (o && typeof o === 'object') {
+          for (const k of Object.keys(o)) walk(o[k], path ? path + '.' + k : k)
+        }
+      }
+      walk(obj, '')
+    }
+    errs.push(`${name} 含 ${replacement} 个替换字符（乱码）${where ? '，位置：' + where : ''}`)
+  }
 }
-checkRaw('venues.json', venues)
-checkRaw('areas.json', areasData)
-checkRaw('reports.json', reports)
+scanNonAscii('venues.json', venues)
+scanNonAscii('areas.json', areasData)
+scanNonAscii('reports.json', reports)
+scanNonAscii('terms.json', terms)
 
 // 10. ID 与 shortName 一致性（避免 TWC/tws 这类问题）
 ALL.forEach(v => {
@@ -190,7 +210,6 @@ Object.entries(shortNames).forEach(([k, list]) => {
 })
 
 // 14. 术语数据完整性
-const terms = JSON.parse(readFileSync(resolve(root, 'data/terms.json'), 'utf8'))
 if (!terms.groups?.length) errs.push('terms.json 缺少 groups')
 let termCount = 0
 terms.groups.forEach(g => {
