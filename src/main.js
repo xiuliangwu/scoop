@@ -673,8 +673,10 @@ function startView() {
 <li>控制篇幅，多数会议有字数限制</li>
 <li>语气专业，避免情绪化</li>
 </ul>
-<h4>PerCom 的早期拒稿机制</h4>
-<div class="editor-note">PerCom 会对没有正面评审的论文提前发出拒稿通知（early reject），此时可以立刻改投其他会议，不必等完整周期。这是好事 —— 意味着提前止损而非浪费半年。</div>`
+<h4>几个特殊机制，投稿前务必确认</h4>
+<div class="editor-note"><b>PerCom</b> 会对没有正面评审的论文提前发出拒稿通知（early reject），此时可以立刻改投其他会议，不必等完整周期。这是好事 —— 意味着提前止损而非浪费半年。</div>
+<div class="editor-note"><b>MobiCom</b> 的 rebuttal 只有 500 词上限，且<b>明确禁止补新实验、新数据或新图</b>，只能澄清评审中的事实错误和回答提问。所以实验必须在投稿前做扎实 —— 指望 rebuttal 阶段补数据是行不通的。另外 MobiCom 2023 起改为双周期（Summer / Winter），被拒后 <b>11 个月内不能重投</b> MobiCom。</div>
+<div class="editor-note"><b>UbiComp</b> 三轮截稿的第一轮通常竞争最小，且有Sensing track 对无线感知类工作更包容 —— 注意选对 track。</div>`
     },
     {
       n: 7,
@@ -717,6 +719,7 @@ function startView() {
   const cycleRows = [
     { name: 'UbiComp', cycle: '5–6 个月', rebuttal: true, note: '三轮滚动征稿' },
     { name: 'PerCom', cycle: '约 3 个月', rebuttal: true, note: '有早期拒稿机制' },
+    { name: 'MobiCom', cycle: '约 2.5 个月（含 rebuttal）', rebuttal: true, note: '双周期，禁补实验' },
     { name: 'MobiSys', cycle: '约 3 个月', rebuttal: false, note: '近年录用率收紧' },
     { name: 'SenSys', cycle: '3–4 个月', rebuttal: false, note: '录用率稳定' },
     { name: 'IPSN', cycle: '待核实', rebuttal: false, note: '' },

@@ -517,6 +517,10 @@
           {
             "id": "tosn",
             "why": "传感器网络顶刊，理论工作常见出口"
+          },
+          {
+            "id": "mobicom",
+            "why": "MobiCom 覆盖移动与网络层，IPSN 偏传感网协议与算法"
           }
         ]
       }
@@ -722,6 +726,236 @@
       }
     },
     {
+      "id": "mobicom",
+      "name": "International Conference on Mobile Computing and Networking",
+      "shortName": "MobiCom",
+      "type": "conference",
+      "rank": "领域旗舰",
+      "tags": [
+        "wireless-network",
+        "mobile-systems",
+        "mmwave-radar"
+      ],
+      "link": "https://sigmobile.org/mobicom/2027/",
+      "dblp": "https://dblp.uni-trier.de/db/conf/mobicom/",
+      "founded": 2002,
+      "frequency": "每年 10 月",
+      "organizer": "ACM SIGMOBILE",
+      "ccfByYear": [
+        {
+          "system": "CCF",
+          "year": 2022,
+          "rank": "A"
+        },
+        {
+          "system": "CCF",
+          "year": 2026,
+          "rank": "A"
+        },
+        {
+          "system": "ICORE",
+          "year": 2026,
+          "rank": "A*"
+        },
+        {
+          "system": "QUALIS",
+          "year": 2026,
+          "rank": "A1"
+        }
+      ],
+      "description": "移动计算与无线网络领域旗舰，CCF A 类。本领域唯一同时覆盖「通信—感知—系统」全链条的顶会，无线感知类工作的主要出口之一。强调原创性基础研究，同时也欢迎真实部署与生产环境的经验总结。",
+      "values": {
+        "hci": 2,
+        "sensing": 4,
+        "systems": 4,
+        "mobile": 5,
+        "hardware": 3,
+        "theory": 4
+      },
+      "valuesNote": "2027 起征稿范围明确覆盖 novel communication and sensing modalities（mmWave、Terahertz、metamaterials）与 advanced sensing and perception systems（多模态感知、定位追踪、通信感知一体化），对无线感知工作友好。强调 novel and foundational research，纯应用型工作竞争力弱；但也明确欢迎 grounded in real-world deployments 的工作。",
+      "editions": [
+        {
+          "year": 2027,
+          "link": "https://sigmobile.org/mobicom/2027/",
+          "accepted": true,
+          "timezone": "AoE",
+          "place": "待更新",
+          "conferenceDate": "Oct 18-22, 2027",
+          "submissions": [
+            {
+              "round": "Summer",
+              "abstract": "2026-08-26",
+              "paper": "2026-09-02"
+            },
+            {
+              "round": "Winter",
+              "abstract": null,
+              "paper": null
+            }
+          ],
+          "timeline": [
+            {
+              "type": "notification",
+              "date": "2026-10-23",
+              "comment": "Summer 早期拒稿通知"
+            },
+            {
+              "type": "rebuttal",
+              "date": "2026-11-03",
+              "comment": "Summer rebuttal 11/3-11/6"
+            },
+            {
+              "type": "notification",
+              "date": "2026-11-19",
+              "comment": "Summer 最终通知"
+            }
+          ],
+          "note": "Winter 轮日期 TBD（往年约次年 1-2 月）；两个轮次均在 AoE 时区"
+        }
+      ],
+      "submission": {
+        "pageLimit": "12 页正文（参考文献与附录不计，需在参考文献后）",
+        "reviewModel": "double-blind",
+        "rebuttal": "有（500 词上限，**不允许补新实验**）",
+        "tracks": [
+          "Regular Papers（含 challenge / experience / verification，不再分赛道）",
+          "Workshops",
+          "Demonstrations",
+          "Student Research Competition"
+        ],
+        "extra": "**双周期 + one-shot revision**：每轮两阶段评审，第一阶段未通过的会提前收到带评审意见的通知；进入第二阶段可提交 500 词rebuttal。最终决定为 Accept（附条件，需通过 anonymous shepherding）/ Reject / One-Shot Revision（给出最多 3 条修改点，可改后投下一轮）。**被拒后 11 个月内不能重投 MobiCom**。模板：ACM sigconf 10pt 双栏，文件 < 15 MB，摘要截稿时abstract 需≥100 词否则 desk reject。"
+      },
+      "acceptanceStats": {
+        "status": "complete",
+        "source": "openaccept",
+        "confidence": "high",
+        "lastVerified": "2026-10-06",
+        "note": "2023 起改为双周期投稿，表中#submitted 与 #accepted 为两轮总和。2024 夏季轮 48/207、冬季轮 55/288；2025 夏季轮 41/240、冬季轮 36/348。",
+        "history": [
+          {
+            "year": 2025,
+            "submitted": 588,
+            "accepted": 77,
+            "rate": 13.1
+          },
+          {
+            "year": 2024,
+            "submitted": 495,
+            "accepted": 103,
+            "rate": 20.81
+          },
+          {
+            "year": 2023,
+            "submitted": 377,
+            "accepted": 92,
+            "rate": 24.4
+          },
+          {
+            "year": 2022,
+            "submitted": 314,
+            "accepted": 56,
+            "rate": 17.83
+          },
+          {
+            "year": 2021,
+            "submitted": 297,
+            "accepted": 59,
+            "rate": 19.87
+          },
+          {
+            "year": 2020,
+            "submitted": 384,
+            "accepted": 62,
+            "rate": 16.15
+          },
+          {
+            "year": 2019,
+            "submitted": 290,
+            "accepted": 55,
+            "rate": 18.97
+          },
+          {
+            "year": 2018,
+            "submitted": 187,
+            "accepted": 42,
+            "rate": 22.46
+          },
+          {
+            "year": 2017,
+            "submitted": 186,
+            "accepted": 35,
+            "rate": 18.82
+          },
+          {
+            "year": 2016,
+            "submitted": 226,
+            "accepted": 31,
+            "rate": 13.72
+          },
+          {
+            "year": 2015,
+            "submitted": 207,
+            "accepted": 38,
+            "rate": 18.36
+          },
+          {
+            "year": 2014,
+            "submitted": 220,
+            "accepted": 36,
+            "rate": 16.36
+          },
+          {
+            "year": 2013,
+            "submitted": 207,
+            "accepted": 28,
+            "rate": 13.53
+          }
+        ],
+        "coverage": {
+          "from": 2013,
+          "to": 2025,
+          "years": 13
+        }
+      },
+      "relations": {
+        "similar": [
+          {
+            "id": "tmc",
+            "why": "移动计算方向的会议与期刊出口，MobiCom 更强调通信与网络原创性"
+          }
+        ],
+        "alternative": [
+          {
+            "id": "mobisys",
+            "why": "同为移动系统，Mobisys 偏系统实现与性能，MobiCom 更强调通信与网络原创性"
+          },
+          {
+            "id": "imwut",
+            "why": "移动感知议题相近，IMWUT 评审周期短一半，且 HCI 属性更强"
+          },
+          {
+            "id": "percom",
+            "why": "无设备感知可投两者，PerCom 更偏普适通信基础设施"
+          }
+        ],
+        "related": [
+          {
+            "id": "sensys",
+            "why": "传感器系统方向相邻，MobiCom 更强调网络与移动性"
+          },
+          {
+            "id": "ndss",
+            "why": "移动与无线系统安全隐私，两边都有活跃议题"
+          },
+          {
+            "id": "ipsn",
+            "why": "传感网协议与网络层技术交叉"
+          }
+        ]
+      },
+      "tips": "注意三个和别的会议不同的地方：①2023 起改成双周期，Winter 轮约在次年 1-2 月，具体看官网；②rebuttal 只有 500 词且**明确禁止补新实验或新数据**，只能澄清事实错误和回答提问，所以实验必须在投稿前做扎实；③被拒后 11 个月内不能重投 MobiCom，要转投其他会议。One-Shot Revision 是二次机会但不是录用保证 —— 评审会给出最多 3 条修改点，改完按是否回应来判断。"
+    },
+    {
       "id": "mobisys",
       "name": "ACM International Conference on Mobile Systems, Applications, and Services",
       "shortName": "MobiSys",
@@ -870,6 +1104,10 @@
       ],
       "relations": {
         "similar": [
+          {
+            "id": "mobicom",
+            "why": "同为移动系统方向，MobiCom 更强调通信与网络原创性，Mobisys 偏系统实现与性能"
+          },
           {
             "id": "sensys",
             "why": "系统实现导向相近"
@@ -1445,6 +1683,10 @@
           {
             "id": "twc",
             "why": "同为 CCF A 顶刊"
+          },
+          {
+            "id": "mobicom",
+            "why": "MobiCom 是会议出口、TMC 是期刊出口，方向高度重叠"
           }
         ],
         "alternative": [
