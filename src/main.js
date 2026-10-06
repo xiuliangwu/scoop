@@ -52,18 +52,28 @@ const fmt = d => (d ? d.replace(/-/g, '.') : '—')
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
 
 // 数据来源标注：始终区分「事实」与「编辑判断」
+// status 四态：complete完整 / partial部分 / missing查过没有 / none不公开
 const srcNote = (stats, extra) => {
-  if (!stats || stats.confidence === 'none') {
-    return `<div class="src-note"><span class="conf conf-none"><span class="conf-dot"></span>暂无核实数据</span>${extra ? ' · ' + esc(extra) : ''}</div>`
+  if (!stats) return ''
+  const srcName = stats.source ? (SOURCES[stats.source]?.name || stats.source) : '—'
+  const confLabel = { high: '高置信', medium: '中等置信', low: '低置信' }[stats.confidence] || '—'
+  const statusLabel = {
+    complete: '数据完整', partial: '部分年份', missing: '未收录', none: '不公开'
+  }[stats.status] || ''
+  // missing / none 也要显示核对日期，让人知道这是查过的结论
+  if (stats.status === 'missing' || stats.status === 'none') {
+    return '<div class="src-note">' +
+      '<span class="conf conf-none"><span class="conf-dot"></span>' + statusLabel + '</span>' +
+      (stats.lastChecked ? '<span>核对于 ' + esc(stats.lastChecked) + '</span>' : '') +
+      (extra ? '<span>' + esc(extra) + '</span>' : '') +
+      '</div>'
   }
-  const srcName = SOURCES[stats.source]?.name || stats.source
-  const confLabel = { high: '高置信', medium: '中等置信', low: '低置信' }[stats.confidence] || stats.confidence
-  return `<div class="src-note">
-    <span class="conf conf-${stats.confidence}"><span class="conf-dot"></span>${confLabel}</span>
-    <span>来源：${esc(srcName)}</span>
-    ${stats.lastVerified ? `<span>核对于 ${stats.lastVerified}</span>` : ''}
-    ${extra ? '<span>' + esc(extra) + '</span>' : ''}
-  </div>`
+  return '<div class="src-note">' +
+    '<span class="conf conf-' + stats.confidence + '"><span class="conf-dot"></span>' + confLabel + '</span>' +
+    '<span>来源：' + esc(srcName) + '</span>' +
+    (stats.lastVerified ? '<span>核对于 ' + esc(stats.lastVerified) + '</span>' : '') +
+    (extra ? '<span>' + esc(extra) + '</span>' : '') +
+    '</div>'
 }
 
 const state = {
@@ -73,6 +83,7 @@ const state = {
   tag: 'all',
   q: '',
   showPrivate: false,
+  view: 'table',
   cmp: ['sensys', 'ubicomp', 'ipsn']
 }
 
@@ -82,94 +93,78 @@ const app = document.getElementById('app')
 // 收集未来的截稿日期。两种来源：
 //   1. deadlines 数组 = 官网确认的真实日期，优先展示
 //   2. 由往年 history 推算 = 规划参考，标注「推算」
+// 从 editions 事件流收集所有未来 deadline（借鉴 CCFDDL 的事件流模型）
+// 每个节点标注：来源 edition、轮次、时区、事件类型
+const EVENT_LABEL = {
+  abstract: '摘要', paper: '全文', rebuttal: 'Rebuttal',
+  notification: '结果', camera: '终稿', conference: '召开'
+}
+const EVENT_COLOR = {
+  abstract: 'b-teal', paper: 'b-blue', rebuttal: 'b-amber',
+  notification: 'b-green', camera: 'b-gray', conference: 'b-purple'
+}
+
 function upcomingDeadlines() {
   const out = []
-  const now = new Date()
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-
   for (const c of venuesRaw.conferences) {
-    // 先收真实日期
-    for (const dl of c.deadlines || []) {
-      if (!dl.date) continue
-      const d = daysUntil(dl.date)
-      if (d < -30 || d > 400) continue
-      out.push({
-        venue: c,
-        date: dl.date,
-        days: d,
-        label: dl.type || '截稿',
-        est: false
-      })
+    for (const ed of c.editions || []) {
+      // timeline 事件（通知、召开等）
+      for (const ev of ed.timeline || []) {
+        if (!ev.date) continue
+        const d = daysUntil(ev.date)
+        if (d < -7 || d > 400) continue
+        out.push({
+          venue: c, date: ev.date, days: d,
+          label: EVENT_LABEL[ev.type] || ev.type,
+          color: EVENT_COLOR[ev.type] || 'b-gray',
+          round: '', tz: ed.timezone || ''
+        })
+      }
+      // submissions 里的 abstract / paper / rebuttal
+      for (const sub of ed.submissions || []) {
+        for (const key of ['abstract', 'paper', 'rebuttal']) {
+          if (!sub[key]) continue
+          const d = daysUntil(sub[key])
+          if (d < -7 || d > 400) continue
+          out.push({
+            venue: c, date: sub[key], days: d,
+            label: EVENT_LABEL[key] || key,
+            color: EVENT_COLOR[key] || 'b-gray',
+            round: sub.round || '', tz: ed.timezone || ''
+          })
+        }
+        if (sub.notification) {
+          const d = daysUntil(sub.notification)
+          if (d >= -7 && d <= 400) {
+            out.push({
+              venue: c, date: sub.notification, days: d,
+              label: EVENT_LABEL.notification,
+              color: EVENT_COLOR.notification,
+              round: sub.round || '', tz: ed.timezone || ''
+            })
+          }
+        }
+      }
     }
-
-    if (!c.timeline?.cycle || !c.history?.length) continue
-    const latest = [...c.history]
-      .filter(h => h.paper)
-      .sort((a, b) => b.year - a.year)[0]
-    if (!latest?.paper) continue
-
-    // yearStep: 1 = 每年，2 = 隔年
-    const step = c.timeline.yearStep || 1
-    const [baseYear, pm, pd] = latest.paper.split('-').map(Number)
-    if (!pm || !pd) continue
-
-    // 基准取 paper 日期自身的年份，而不是 history 里的 year 字段。
-    // history.year 表示「哪一届」（会议当年），paper 则是前一年投的，
-    // 两者差一，用 year 会把推算结果整体后移一年。
-    // 从基准年起按yearStep 递增，找到下一个尚未过去的日期。
-    let year = baseYear
-    for (let i = 0; i < 12; i++) {
-      year += step
-      if (shiftMonth(year, pm, pd) >= today) break
-      if (year > now.getFullYear() + 4) break
-    }
-
-    // 往前留一个提前规划缓冲，避免刚过完就立刻提醒下一次。
-    // 注意：判断「是否过期」要在减完buffer 之后做。真实截稿日可能就在
-    // 近期（如 SAM 去年 10-15 截稿），减掉 1 个月缓冲后会落回过去，
-    // 此时应继续往后推一年，而不是把已过去的日期显示成「已过」。
-    const buffer = c.timeline.bufferMonths || 1
-    let est = shiftMonth(year, pm - buffer, pd)
-    if (est < today) {
-      est = shiftMonth(year + step, pm - buffer, pd)
-    }
-
-    const d = daysUntil(localISO(est))
-    if (d < -30 || d > 400) continue
-    out.push({
-      venue: c,
-      date: localISO(est),
-      days: d,
-      label: '预计截稿',
-      est: true
-    })
   }
-  // 真实日期优先（不标注「推算」），排在前；推算的作为规划参考
-  return out.sort((a, b) => (a.est === b.est ? a.days - b.days : a.est ? 1 : -1))
-}
-
-// 把日期平移到目标月份。若该月没有 day 号（如 3-31 往前推一个月），
-// 落到目标月最后一天，而不是让 Date 静默进位到下个月。
-function shiftMonth(year, month1, day) {
-  const first = new Date(year, month1 - 1, 1)
-  const lastDay = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate()
-  return new Date(year, month1 - 1, Math.min(day, lastDay))
-}
-
-// toISOString 会按 UTC 转换导致日期偏一天，本地日期一律走这个
-function localISO(d) {
-  const p = n => String(n).padStart(2, '0')
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`
+  // 论文类事件优先（abstract/paper），其次其他
+  const paperFirst = e => (e.label === '全文' || e.label === '摘要' ? 0 : 1)
+  return out.sort((a, b) => (paperFirst(a) - paperFirst(b) || a.days - b.days))
 }
 
 const deadlineRow = d => {
   const cls = d.days < 0 ? 'urgent' : d.days <= 30 ? 'urgent' : d.days <= 90 ? 'soon' : 'normal'
   const left = d.days < 0 ? '已过' : d.days === 0 ? '今天' : `${d.days} 天`
-  return `<div class="cd-row">
-    <span class="cd-name">${d.venue.shortName}<span class="badge ${d.est ? 'b-gray' : 'b-green'}">${d.label}</span></span>
-    <span class="cd-date">${fmt(d.date)}</span>
-    <span class="cd-left ${cls}">${left}</span>
-  </div>`
+  return '<div class="cd-row">' +
+    '<span class="cd-name">' + esc(d.venue.shortName) +
+      '<span class="badge ' + (d.color || 'b-gray') + '">' + esc(d.label) + '</span>' +
+      (d.round ? '<span class="badge b-gray">' + esc(d.round) + '</span>' : '') +
+    '</span>' +
+    '<span class="cd-date">' + fmt(d.date) +
+      (d.tz ? '<span class="tz">' + esc(d.tz) + '</span>' : '') +
+    '</span>' +
+    '<span class="cd-left ' + cls + '">' + left + '</span>' +
+  '</div>'
 }
 
 /* ---------- Explore: 研究领域导航 ---------- */
@@ -264,6 +259,19 @@ function profileView(venueId) {
   const st = v.acceptanceStats || {}
   const hist = (st.history || []).slice().sort((a, b) => a.year - b.year)
 
+  // Data Coverage：明确说明覆盖哪些年份，让缺失可感知
+  const coverageText = (() => {
+    const cov = st.coverage
+    if (!cov || !hist.length) return ''
+    const years = hist.map(h => h.year)
+    const gaps = []
+    for (let y = cov.from; y <= cov.to; y++) if (!years.includes(y)) gaps.push(y)
+    let t = '覆盖 ' + cov.from + '–' + cov.to + '（' + cov.years + ' 年）'
+    if (gaps.length) t += '，缺 ' + gaps.join('/')
+    if (cov.to < new Date().getFullYear() - 1) t += ' · 数据可能滞后'
+    return t
+  })()
+
   // Identity
   const facts = [
     ['类型', isConf ? '会议' : '期刊'],
@@ -302,40 +310,75 @@ function profileView(venueId) {
       statsRows + '</tbody></table>'
     : ''
 
-  // 投稿流程
+  // 投稿周期：按 edition 事件流渲染（借鉴 CCFDDL）
   const flow = isConf ? (() => {
-    const steps = [
-      ['CFP', v.submission?.extra?.includes('强制') ? '见官网' : '征稿开始'],
-      ['Abstract', v.deadlines?.[0] ? fmt(v.deadlines[0].date) : '见官网'],
-      ['Full Paper', v.history?.[0]?.paper ? fmt(v.history[0].paper) + ' (' + v.history[0].year + ')' : '见官网'],
-      ['Review', '评审'],
-      ['Rebuttal', v.submission?.rebuttal?.startsWith('有') ? '有' : '—'],
-      ['Notification', v.history?.[0]?.notification ? fmt(v.history[0].notification) : '见官网'],
-      ['Conference', v.timeline?.cycle || '—']
-    ]
-    const parts = steps.map((s, i) =>
-      '<span class="flow-step">' + esc(s[0]) +
-      '<span style="color:var(--text-3)"> ' + esc(s[1]) + '</span></span>' +
-      (i < steps.length - 1 ? '<span class="flow-arrow">→</span>' : '')
-    )
-    return '<div class="flow">' + parts.join('') + '</div>'
+    const eds = (v.editions || []).slice().sort((a, b) => b.year - a.year)
+    if (!eds.length) return '<p class="no-data">暂无投稿周期数据</p>'
+    return eds.map(function (ed) {
+      const rows = []
+      for (const sub of ed.submissions || []) {
+        const rd = sub.round ? '<b>' + esc(sub.round) + '</b>' : '—'
+        rows.push('<tr><td>' + rd + '</td>' +
+          '<td>' + (sub.abstract ? fmt(sub.abstract) : '—') + '</td>' +
+          '<td>' + (sub.paper ? fmt(sub.paper) : '—') + '</td>' +
+          '<td>' + (sub.rebuttal ? fmt(sub.rebuttal) : '—') + '</td>' +
+          '<td>' + (sub.notification ? fmt(sub.notification) : '—') + '</td></tr>')
+      }
+      const tl = (ed.timeline || []).map(function (ev) {
+        return '<span class="tl-ev"><span class="badge ' + (EVENT_COLOR[ev.type] || 'b-gray') + '">' +
+          esc(EVENT_LABEL[ev.type] || ev.type) + '</span>' + fmt(ev.date) +
+          (ev.comment ? ' <span style="color:var(--text-3)">' + esc(ev.comment) + '</span>' : '') +
+          '</span>'
+      }).join('')
+      return '<div class="edition">' +
+        '<div class="ed-head">' +
+          '<span class="ed-year">' + ed.year + ' 届' +
+          (ed.accepted ? '<span class="badge b-green">征稿中</span>' : '') + '</span>' +
+          '<span class="ed-meta">' +
+            (ed.place ? esc(ed.place) + ' · ' : '') +
+            (ed.timezone ? '时区 ' + esc(ed.timezone) : '') +
+            (ed.conferenceDate ? ' · ' + esc(ed.conferenceDate) : '') +
+          '</span>' +
+        '</div>' +
+        (rows.length ? '<table class="data"><thead><tr><th>轮次</th><th>摘要</th><th>全文</th><th>Rebuttal</th><th>结果</th></tr></thead><tbody>' +
+          rows.join('') + '</tbody></table>' : '') +
+        (tl ? '<div class="tl">' + tl + '</div>' : '') +
+        (ed.statsNote ? '<div class="src-note" style="margin-top:6px">' + esc(ed.statsNote) + '</div>' : '') +
+        (ed.link ? '<div class="src-note" style="margin-top:6px"><a href="' + ed.link + '" target="_blank" rel="noopener">该届官网 ↗</a></div>' : '') +
+      '</div>'
+    }).join('')
   })() : ''
 
-  // 相似 venue
-  const related = (v.related || []).map(function (id) { return BY_ID[id] }).filter(Boolean)
-  const relCards = related.map(function (r) {
-    const rl = r.acceptanceStats && r.acceptanceStats.history && r.acceptanceStats.history[0]
-    const rank = rankText(r)
-    const cas = r.cas ? ' · ' + r.cas : ''
-    const rate = rl ? '录用率 ' + rl.rate + '%' : '录用率未核实'
-    return '<div class="rel-card" data-venue="' + r.id + '">' +
-      '<div class="n">' + esc(r.shortName) + '</div>' +
-      '<div class="d">' + rank + cas + '</div>' +
-      '<div class="d">' + rate + '</div></div>'
-  })
-  const relatedCards = related.length ? relCards.join('') : '<p class="no-data">暂无关联 venue</p>'
-
-  // 所属领域
+  // 关系三分法：similar / alternative / related
+  const REL_META = {
+    similar: { title: 'Similar', desc: '领域和贡献模式相近，可作为同类替代' },
+    alternative: { title: 'Alternative', desc: '研究问题类似但投稿侧重点不同，值得换个角度考虑' },
+    related: { title: 'Related', desc: '技术或研究社区存在交叉' }
+  }
+  const relSection = (() => {
+    const rel = v.relations || {}
+    const blocks = []
+    for (const key of ['similar', 'alternative', 'related']) {
+      const list = rel[key] || []
+      if (!list.length) continue
+      const m = REL_META[key]
+      const cards = list.map(function (item) {
+        const r = BY_ID[item.id]
+        if (!r) return ''
+        const rl = r.acceptanceStats && r.acceptanceStats.history && r.acceptanceStats.history[0]
+        return '<div class="rel-card" data-venue="' + r.id + '">' +
+          '<div class="n">' + esc(r.shortName) + '</div>' +
+          '<div class="d">' + rankText(r) + (r.cas ? ' · 中科院' + r.cas : '') + '</div>' +
+          '<div class="d">' + (rl ? '录用率 ' + rl.rate + '%' : '录用率未核实') + '</div>' +
+          '<div class="why">' + esc(item.why) + '</div></div>'
+      }).join('')
+      blocks.push('<div class="rel-group">' +
+        '<div class="rel-head"><span class="rel-title">' + m.title + '</span>' +
+        '<span class="rel-desc">' + m.desc + '</span></div>' +
+        '<div class="rel-grid">' + cards + '</div></div>')
+    }
+    return blocks.length ? blocks.join('') : '<p class="no-data">暂无关联 venue</p>'
+  })()
   const areas = AREAS.filter(a => a.venueIds.includes(v.id))
 
   return `
@@ -429,9 +472,9 @@ function profileView(venueId) {
   </div>
 
   ${isConf ? `<div class="mod">
-    <div class="mod-head"><h2>投稿流程与时间线</h2><span class="hint">日期来源见各项标注</span></div>
+    <div class="mod-head"><h2>投稿周期（历届）</h2><span class="hint">时区与轮次均按官方标注</span></div>
     ${flow}
-    ${v.submission?.tracks?.length ? `<div style="margin-top:10px">
+    ${v.submission?.tracks?.length ? `<div style="margin-top:12px">
       <div style="font-size:11.5px;color:var(--text-3);margin-bottom:4px">Track / 投稿类型</div>
       <div style="display:flex;gap:5px;flex-wrap:wrap">${v.submission.tracks.map(t => `<span class="badge b-gray">${esc(t)}</span>`).join('')}</div>
     </div>` : ''}
@@ -441,8 +484,8 @@ function profileView(venueId) {
 
   <div class="mod">
     <div class="mod-head">
-      <h2>${isConf ? '录用率' : '审稿与录用'}</h2>
-      <span class="hint">${hist.length ? hist.length + ' 年数据' : '暂无数据'}</span>
+      <h2>${isConf ? '录用率与竞争程度' : '审稿周期'}</h2>
+      <span class="hint">${st.status === 'none' ? '该刊不公开录用数据' : hist.length ? coverageText : '未找到公开数据'}</span>
     </div>
     ${hist.length ? `${trend}
       <div style="display:flex;gap:14px;font-size:11.5px;color:var(--text-3);margin:6px 0 14px">
@@ -450,14 +493,17 @@ function profileView(venueId) {
         <span><span style="display:inline-block;width:8px;height:8px;background:var(--accent);border-radius:2px;margin-right:4px"></span>录用数</span>
       </div>
       ${statsTable}
-      ${v.acceptanceStats?.note ? `<div class="src-note" style="margin-top:10px">${esc(v.acceptanceStats.note)}</div>` : ''}
-    ` : `<p class="no-data">${esc(st.note || '暂无核实数据')}</p>`}
-    ${srcNote(st)}
+    ` : `<div class="missing-data">
+        <div class="md-title">${st.status === 'none' ? '该刊录用率通常不公开' : '未找到可靠公开录用统计'}</div>
+        <div class="md-note">${esc(st.note || '')}</div>
+        <div class="md-check">上次核对：${esc(st.lastChecked || META.lastUpdated)}</div>
+      </div>`}
+    ${srcNote(st, hist.length ? coverageText : '')}
   </div>
 
   <div class="mod">
-    <div class="mod-head"><h2>相似与相关 venue</h2><span class="hint">${related.length} 个</span></div>
-    <div class="rel-grid">${relatedCards}</div>
+    <div class="mod-head"><h2>关联 venue</h2><span class="hint">按关系类型分组</span></div>
+    ${relSection}
   </div>
 
   ${v.tips ? `<div class="mod">
@@ -531,16 +577,23 @@ function compareView() {
         ${dimRows}
         <tr style="background:var(--surface-2)"><td colspan="${picked.length + 1}" style="font-size:11.5px;color:var(--text-3)">投稿事实</td></tr>
         ${row('录用率（最新）', v => {
-          const h = v.acceptanceStats?.history?.[0]
-          return h ? h.rate + '%' : null
+          const h = v.acceptanceStats && v.acceptanceStats.history && v.acceptanceStats.history[0]
+          return h ? h.rate + '%（' + h.year + '）' : null
         })}
-        ${row('投稿数（最新）', v => v.acceptanceStats?.history?.[0]?.submitted ?? null)}
+        ${row('数据覆盖', v => {
+          const c = v.acceptanceStats && v.acceptanceStats.coverage
+          return c ? c.from + '–' + c.to + '（' + c.years + '年）' : null
+        })}
         ${row('页数/篇幅', v => v.type === 'conference' ? (v.submission?.pageLimit || '').replace(/以官网为准/, '见官网').slice(0, 22) : `${v.reviewCycle || '—'}`)}
         ${row('Rebuttal', v => v.type === 'conference' ? (v.submission?.rebuttal?.startsWith('有') ? '有' : '—') : '—')}
         <tr><td style="color:var(--text-3)">数据置信</td>${picked.map(v => {
-          const c = v.acceptanceStats?.confidence || 'none'
-          const label = { high: '高', medium: '中', low: '低', none: '无数据' }[c]
-          return `<td class="num"><span class="conf conf-${c}"><span class="conf-dot"></span>${label}</span></td>`
+          const s2 = v.acceptanceStats || {}
+          const conf = s2.confidence || 'none'
+          const label = { high: '高置信', medium: '中置信', low: '低置信', none: '—' }[conf]
+          const st2 = { complete: '完整', partial: '部分', missing: '未收录', none: '不公开' }[s2.status] || '—'
+          return '<td class="num">' +
+            '<span class="conf conf-' + conf + '"><span class="conf-dot"></span>' + label + '</span>' +
+            '<div style="font-size:11px;color:var(--text-3)">' + st2 + '</div></td>'
         }).join('')}</tr>
       </tbody>
     </table>
@@ -557,97 +610,216 @@ function compareView() {
 
 /* ---------- render ---------- */
 function homeView() {
+  // 工具型首页（借鉴 CCFDDL）：搜索 + 倒计时 + 领域导航 + 对比入口
   const dl = upcomingDeadlines()
-  const next = dl.slice(0, 8)
+  const paperDl = dl.filter(d => d.label === '全文' || d.label === '摘要').slice(0, 10)
+  const otherDl = dl.filter(d => d.label !== '全文' && d.label !== '摘要').slice(0, 4)
   const acc = REPORTS.filter(r => r.status === 'accepted').length
-  const sub = REPORTS.filter(r => r.status === 'under-review').length
-  const rej = REPORTS.filter(r => r.status === 'rejected').length
+
+  const dlRow = d => {
+    const cls = d.days < 0 ? 'urgent' : d.days <= 30 ? 'urgent' : d.days <= 90 ? 'soon' : 'normal'
+    const left = d.days < 0 ? '已过' : d.days === 0 ? '今天' : d.days + ' 天'
+    return '<tr>' +
+      '<td><span class="venue-link" data-venue="' + d.venue.id + '"><b>' + esc(d.venue.shortName) + '</b></span></td>' +
+      '<td style="font-size:12px">' + rankText(d.venue) + '</td>' +
+      '<td><span class="badge ' + (d.color || 'b-gray') + '">' + esc(d.label) + '</span>' +
+        (d.round ? ' <span style="font-size:11px;color:var(--text-3)">' + esc(d.round) + '</span>' : '') + '</td>' +
+      '<td style="font-size:12.5px">' + fmt(d.date) + (d.tz ? ' <span class="tz">' + esc(d.tz) + '</span>' : '') + '</td>' +
+      '<td class="num ' + cls + '">' + left + '</td>' +
+    '</tr>'
+  }
+
+  const areaCards = AREAS.map(a => {
+    const vs = a.venueIds.map(id => BY_ID[id]).filter(Boolean)
+    const confs = vs.filter(v => v.type === 'conference').length
+    return '<div class="area-card b-' + a.color + '" data-area="' + a.id + '">' +
+      '<h3>' + esc(a.name) + '</h3>' +
+      '<div class="en">' + esc(a.enName) + '</div>' +
+      '<p>' + esc(a.summary) + '</p>' +
+      '<div style="display:flex;gap:5px;flex-wrap:wrap">' +
+        '<span class="badge b-gray">' + a.topics.length + ' 子主题</span>' +
+        '<span class="badge b-gray">' + confs + ' 会议 · ' + (vs.length - confs) + ' 期刊</span>' +
+      '</div></div>'
+  }).join('')
 
   return `
-  <div class="page-head">
-    <h1>投稿信息看板</h1>
-    <p>${META.field || ''} · 组内会议与期刊的截止时间、投稿经验和历史记录</p>
-  </div>
-  <div class="banner">
-    <b>数据更新于 ${META.lastUpdated}</b>
-    <span>标注「预计截稿」的日期由往年周期估算，仅作规划参考；实际日期请以官网 CFP 为准。</span>
+  <div class="hero">
+    <h1>Research Venue Navigator</h1>
+    <p>${esc(META.field || '')} · 理解会议期刊定位，比较投稿目标</p>
+    <input type="search" class="search-lg" id="hero-q" placeholder="搜索会议、期刊、主题或标签，例如：毫米波、无设备感知、UbiComp" />
   </div>
 
   <section>
     <div class="sec-head">
-      <h2>未来截稿窗口</h2>
-      <span class="hint">按预计截稿时间排序，覆盖约未来 12 个月</span>
+      <h2>即将到来的截稿</h2>
+      <span class="hint">论文类事件优先 · 数据更新于 ${META.lastUpdated}</span>
     </div>
-    ${next.length ? next.map(deadlineRow).join('') : '<div class="empty">暂无数据</div>'}
+    ${paperDl.length ? '<div class="mod cmp-table" style="padding:0"><table class="data"><thead><tr>' +
+      '<th>Venue</th><th>分级</th><th>类型</th><th>日期</th><th class="num">剩余</th>' +
+      '</tr></thead><tbody>' + paperDl.map(dlRow).join('') + '</tbody></table></div>'
+      : '<div class="empty">近期没有已确认的截稿日期</div>'}
+    ${otherDl.length ? '<div style="margin-top:12px"><div style="font-size:11.5px;color:var(--text-3);margin-bottom:6px">其他节点（rebuttal / 结果 / 召开）</div>' +
+      '<div class="flow">' + otherDl.map(d => '<span class="flow-step">' + esc(d.venue.shortName) +
+        ' <span class="badge ' + (d.color || 'b-gray') + '">' + esc(d.label) + '</span> ' +
+        fmt(d.date) + ' <b style="color:var(--text-2)">' + (d.days >= 0 ? d.days + '天' : '已过') + '</b></span>').join('') +
+      '</div></div>' : ''}
   </section>
 
   <section>
-    <div class="sec-head"><h2>投稿概览</h2></div>
-    <div class="grid c3">
-      <div class="card"><div class="card-meta">已收录会议</div><div class="card-name">${venuesRaw.conferences.length} 个</div></div>
-      <div class="card"><div class="card-meta">已收录期刊</div><div class="card-name">${venuesRaw.journals.length} 本</div></div>
-      <div class="card">
-        <div class="card-meta">组内投稿记录</div>
-        <div class="card-name">${REPORTS.length ? `${REPORTS.length} 条 · 命中 ${acc}` : '待补充'}</div>
+    <div class="sec-head">
+      <h2>研究领域</h2>
+      <span class="hint">从研究问题出发找venue</span>
+    </div>
+    <div class="area-grid">${areaCards}</div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>快速对比</h2>
+      <span class="hint">最多 4 个，最多 4 个维度并排</span>
+    </div>
+    <div class="mod">
+      <div class="cmp-picker" style="margin-bottom:12px">
+        ${VENUES.slice(0, 10).map(v => '<button class="chip ' + (state.cmp.includes(v.id) ? 'on' : '') + '" data-cmp="' + v.id + '">' + esc(v.shortName) + '</button>').join('')}
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:12.5px;color:var(--text-2)">已选 ${state.cmp.length} 个：</span>
+        ${state.cmp.map(id => {
+          const v = BY_ID[id]
+          return v ? '<span class="badge b-blue">' + esc(v.shortName) + '</span>' : ''
+        }).join('')}
+        <button class="chip" data-tab="compare" style="margin-left:auto">开始对比 →</button>
       </div>
     </div>
   </section>
 
   <section>
     <div class="sec-head">
-      <h2>最近战报</h2>
-      ${REPORTS.length ? `<span class="hint">${sub} 条在审 · ${rej} 条已拒</span>` : '<span class="hint">暂无记录</span>'}
+      <h2>收录情况</h2>
+      <span class="hint">组内投稿记录待补充</span>
     </div>
-    ${reportsView()}
+    <div class="grid c3">
+      <div class="card"><div class="card-meta">会议</div><div class="card-name">${venuesRaw.conferences.length} 个</div></div>
+      <div class="card"><div class="card-meta">期刊</div><div class="card-name">${venuesRaw.journals.length} 本</div></div>
+      <div class="card">
+        <div class="card-meta">组内投稿记录</div>
+        <div class="card-name">${REPORTS.length ? REPORTS.length + ' 条 · 命中 ' + acc : '待补充'}</div>
+      </div>
+    </div>
   </section>`
 }
 
 function venuesView() {
+  // 领域与子主题建索引，让首页搜索「毫米波」能命中
+  const topicIndex = {}
+  for (const a of AREAS) {
+    for (const t of a.topics) {
+      topicIndex[t.id] = { name: t.name, desc: t.desc, area: a.name }
+      topicIndex[t.name] = { name: t.name, desc: t.desc, area: a.name }
+    }
+  }
   const list = VENUES.filter(v => {
     if (state.tag !== 'all' && !(v.tags || []).includes(state.tag)) return false
     if (state.q) {
-      const hay = (v.shortName + v.name + v.description).toLowerCase()
-      if (!hay.includes(state.q.toLowerCase())) return false
+      const kw = state.q.toLowerCase()
+      const hay = [
+        v.shortName, v.name, v.description,
+        (v.tags || []).map(t => tagName(t)).join(' '),
+        (v.tags || []).map(t => topicIndex[t] ? topicIndex[t].name : '').join(' '),
+        (v.tags || []).map(t => topicIndex[t] ? topicIndex[t].desc : '').join(' ')
+      ].join(' ').toLowerCase()
+      if (!hay.includes(kw)) return false
     }
     return true
   })
 
-  const chips = `<div class="filters">
-    <input type="search" id="q" placeholder="搜索会议或期刊…" value="${state.q}" />
-    <button class="chip ${state.tag === 'all' ? 'on' : ''}" data-tag="all">全部</button>
-    ${TAGS.map(t => `<button class="chip ${state.tag === t.id ? 'on' : ''}" data-tag="${t.id}">${t.name}</button>`).join('')}
-  </div>`
+  const chips = '<div class="filters">' +
+    '<input type="search" id="q" placeholder="搜索会议、期刊、标签…" value="' + esc(state.q) + '" />' +
+    '<button class="chip ' + (state.tag === 'all' ? 'on' : '') + '" data-tag="all">全部</button>' +
+    TAGS.map(t => '<button class="chip ' + (state.tag === t.id ? 'on' : '') + '" data-tag="' + t.id + '">' + esc(t.name) + '</button>').join('') +
+    '<div style="margin-left:auto" class="view-switch">' +
+      '<button class="' + (state.view === 'table' ? 'on' : '') + '" data-view="table">表格</button>' +
+      '<button class="' + (state.view === 'card' ? 'on' : '') + '" data-view="card">卡片</button>' +
+    '</div>' +
+  '</div>'
 
-  const cards = list.map(function (v) {
+  // 取每个 venue 的下一截稿（供表格用）
+  const nextDeadline = v => {
+    if (v.type !== 'conference') return null
+    let best = null
+    for (const ed of v.editions || []) {
+      for (const sub of ed.submissions || []) {
+        for (const k of ['abstract', 'paper']) {
+          if (!sub[k]) continue
+          const d = daysUntil(sub[k])
+          if (d < 0 || d > 400) continue
+          if (!best || d < best.days) best = { days: d, date: sub[k], round: sub.round || '', type: k }
+        }
+      }
+    }
+    return best
+  }
+
+  // ---- 表格视图：信息密度高，适合查 ----
+  const tableRows = list.map(v => {
+    const st = v.acceptanceStats || {}
+    const h = st.history && st.history[st.history.length - 1]
+    const cov = st.coverage
+    const rateCell = h
+      ? '<b>' + h.rate + '%</b><div style="font-size:11px;color:var(--text-3)">' + h.year + ' 年</div>'
+      : '<span style="color:var(--text-3)">' +
+        (st.status === 'none' ? '不公开' : '未收录') + '</span>'
+    const dl = nextDeadline(v)
+    const dlCell = dl
+      ? fmt(dl.date) + '<div style="font-size:11px;color:var(--text-3)">' +
+        esc(dl.type === 'paper' ? '全文' : '摘要') + (dl.round ? ' · ' + esc(dl.round) : '') +
+        (dl.days <= 30 ? ' · <b style="color:var(--red)">' + dl.days + '天</b>' : ' · ' + dl.days + '天') + '</div>'
+      : '<span style="color:var(--text-3)">—</span>'
+    const covCell = cov
+      ? cov.from + '–' + cov.to + '<div style="font-size:11px;color:var(--text-3)">' + cov.years + ' 年数据</div>'
+      : '<span style="color:var(--text-3)">—</span>'
+    return '<tr>' +
+      '<td><span class="venue-link" data-venue="' + v.id + '"><b>' + esc(v.shortName) + '</b></span>' +
+        '<div style="font-size:11px;color:var(--text-3)">' + (v.type === 'conference' ? '会议' : '期刊') + '</div></td>' +
+      '<td style="font-size:12px">' + rankText(v) + (v.cas ? '<div style="font-size:11px;color:var(--text-3)">中科院' + esc(v.cas) + '</div>' : '') + '</td>' +
+      '<td class="num">' + rateCell + '</td>' +
+      '<td style="font-size:12px">' + covCell + '</td>' +
+      '<td style="font-size:12px">' + dlCell + '</td>' +
+      '<td style="font-size:11.5px">' + (v.tags || []).slice(0, 2).map(tagBadge).join(' ') + '</td>' +
+    '</tr>'
+  }).join('')
+
+  const tableView =
+    '<div class="mod cmp-table" style="padding:0"><table class="data"><thead><tr>' +
+      '<th>Venue</th><th>分级</th><th class="num">录用率</th><th>数据覆盖</th><th>下一截稿</th><th>标签</th>' +
+    '</tr></thead><tbody>' + tableRows + '</tbody></table></div>'
+
+  // ---- 卡片视图：适合理解 ----
+  const cardView = '<div class="grid c3">' + list.map(function (v) {
     const isJ = v.type === 'journal'
     const st = v.acceptanceStats || {}
-    const hist = st.history || []
-    const last = hist[hist.length - 1]
-    const rankBadge = isJ
-      ? '<span class="badge b-purple">' + esc(v.rank) + '</span>' +
-        rankBadges(v) +
-        (v.cas ? '<span class="badge b-coral">中科院' + v.cas + '</span>' : '') +
-        (v.if ? '<span class="badge b-amber">IF ' + v.if + '</span>' : '')
-      : '<span class="badge b-blue">' + esc(v.rank) + '</span>' +
-        rankBadges(v) +
-        '<span class="badge b-gray">' + esc(v.timeline ? v.timeline.cycle : '') + '</span>'
-    // 录用率一行：显示最新年份 + 置信度，缺失时明确说明
-    const rateLine = last
-      ? '<span>录用率 ' + last.year + ' 年<b>' + last.rate + '%</b></span>' +
+    const h = st.history && st.history[st.history.length - 1]
+    const cov = st.coverage
+    const rankBadge = '<span class="badge b-' + (isJ ? 'purple' : 'blue') + '">' + esc(v.rank) + '</span>' +
+      rankBadges(v) +
+      (v.cas ? '<span class="badge b-coral">中科院' + v.cas + '</span>' : '') +
+      (v.if ? '<span class="badge b-amber">IF ' + v.if + '</span>' : '')
+    const rateLine = h
+      ? '<span>录用率 <b>' + h.rate + '%</b>（' + h.year + '）</span>' +
         '<span class="conf conf-' + st.confidence + '"><span class="conf-dot"></span>' +
         ({ high: '高置信', medium: '中置信', low: '低置信' }[st.confidence] || '') + '</span>'
-      : '<span style="color:var(--text-3)">录用率暂无核实数据</span>'
-    // 价值维度前两项
+      : '<span style="color:var(--text-3)">' + (st.status === 'none' ? '录用率不公开' : '录用率未收录') + '</span>' +
+        (cov ? '' : '<span class="conf conf-none"><span class="conf-dot"></span>已核对</span>')
     const topDims = DIMS
-      .map(function (d) { return { n: d[0], label: d[1], v: v.values ? v.values[d[0]] : 0 } })
-      .sort(function (a, b) { return b.v - a.v })
+      .map(d => ({ label: d[1], v: v.values ? v.values[d[0]] : 0 }))
+      .sort((a, b) => b.v - a.v)
       .slice(0, 2)
-      .map(function (d) { return '<span>' + d.label.split(' / ')[0] + ' ' + d.v + '/5</span>' })
+      .map(d => '<span>' + esc(d.label.split(' / ')[0]) + ' ' + d.v + '/5</span>')
       .join('')
+    const dl = nextDeadline(v)
     const extra = isJ
       ? '<span>' + esc(v.publisher) + '</span><span>' + esc(v.reviewCycle || '') + '</span>'
-      : '<span>' + esc(v.timeline ? v.timeline.months : '') + '</span>'
-
+      : (dl ? '<span>下一截稿 ' + fmt(dl.date) + '</span>' : '<span>' + esc(v.frequency || '') + '</span>')
     return '<div class="card" data-venue="' + v.id + '">' +
       '<div class="card-top"><div>' +
         '<div class="card-name">' + esc(v.shortName) + '</div>' +
@@ -658,15 +830,16 @@ function venuesView() {
       '<div>' + (v.tags || []).map(tagBadge).join(' ') + '</div>' +
       '<div class="card-foot">' + rateLine + topDims + extra + '</div>' +
     '</div>'
-  }).join('')
+  }).join('') + '</div>'
 
   return `
   <div class="page-head">
     <h1>会议与期刊</h1>
-    <p>共 ${VENUES.length} 条记录 · 点击卡片查看详情（含录用率、价值取向、投稿流程）</p>
+    <p>共 ${VENUES.length} 条记录 · ${state.view === 'table' ? '表格视图适合快速查找' : '卡片视图适合了解详情'}</p>
   </div>
   ${chips}
-  ${list.length ? `<div class="grid c3">${cards}</div>` : '<div class="empty">没有匹配的记录</div>'}`
+  ${list.length ? (state.view === 'table' ? tableView : cardView) : '<div class="empty">没有匹配的记录</div>'}
+`
 }
 
 function reportsView() {
@@ -852,6 +1025,10 @@ function bind() {
     state.tab = 'profile'
     render()
   })
+  app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => {
+    state.view = b.dataset.view
+    render()
+  })
   app.querySelectorAll('[data-cmp]').forEach(b => b.onclick = () => {
     const id = b.dataset.cmp
     const i = state.cmp.indexOf(id)
@@ -874,6 +1051,21 @@ function bind() {
       const nq = app.querySelector('#q')
       if (nq) { nq.focus(); nq.setSelectionRange(pos, pos) }
     }
+  }
+
+  // 首页大搜索框：回车或输入后跳到列表页并带上关键词
+  const hero = app.querySelector('#hero-q')
+  if (hero) {
+    hero.oninput = e => { state.q = e.target.value }
+    hero.onkeydown = e => {
+      if (e.key === 'Enter') {
+        state.tab = 'venues'
+        state.area = null
+        state.venue = null
+        render()
+      }
+    }
+    if (state.q) { hero.value = state.q }
   }
 }
 

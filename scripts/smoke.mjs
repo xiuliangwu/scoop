@@ -36,7 +36,7 @@ function probe(label) {
   const text = document.body.textContent.replace(/\s+/g, ' ')
   return {
     label,
-    title: q('.page-head h1, .profile-head h1')?.textContent.trim() || '(无标题)',
+    title: q('.page-head h1, .profile-head h1, .hero h1')?.textContent.trim() || '(无标题)',
     textLen: text.length,
     areas: qa('.area-card').length,
     mods: qa('.mod').length,

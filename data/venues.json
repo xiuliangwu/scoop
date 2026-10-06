@@ -143,25 +143,6 @@
         "months": "提前 5 个月征稿",
         "bufferMonths": 1
       },
-      "history": [
-        {
-          "year": 2026,
-          "paper": "2026-02-01",
-          "notification": "2026-07-26"
-        },
-        {
-          "year": 2025,
-          "paper": "2025-02-01",
-          "notification": "2025-07-15"
-        }
-      ],
-      "deadlines": [
-        {
-          "type": "第 3 轮",
-          "date": "2026-11-01",
-          "note": "ISWC Notes & Briefs / Workshop / Doctoral Colloquium"
-        }
-      ],
       "submission": {
         "pageLimit": "主会 10 页 + 1 页参考文献",
         "reviewModel": "double-blind",
@@ -216,14 +197,14 @@
             "accepted": 101,
             "rate": 25.63
           }
-        ]
+        ],
+        "status": "complete",
+        "coverage": {
+          "from": 2015,
+          "to": 2020,
+          "years": 6
+        }
       },
-      "related": [
-        "imwut",
-        "percom",
-        "mobisys",
-        "ndss"
-      ],
       "tips": "三轮中第一轮通常竞争最小。Sensing track 对无线感知类工作最对口。审稿周期约 5-6 个月，要留足等待时间。",
       "ccfByYear": [
         {
@@ -236,7 +217,82 @@
           "year": 2026,
           "rank": "A"
         }
-      ]
+      ],
+      "editions": [
+        {
+          "year": 2026,
+          "link": "https://www.ubicomp.org/ubicomp-iswc-2026",
+          "accepted": true,
+          "timezone": "AoE",
+          "place": "China, Shanghai",
+          "conferenceDate": "October 11-15, 2026",
+          "submissions": [
+            {
+              "round": "R1",
+              "abstract": "2026-02-01",
+              "paper": "2026-02-02",
+              "notification": "2026-07-26"
+            },
+            {
+              "round": "R2",
+              "abstract": "2026-05-01",
+              "paper": "2026-05-02",
+              "notification": "2026-07-26"
+            }
+          ],
+          "timeline": [
+            {
+              "type": "conference",
+              "date": "2026-10-11",
+              "comment": "会议召开"
+            }
+          ]
+        },
+        {
+          "year": 2025,
+          "link": "https://www.ubicomp.org/ubicomp-iswc-2025",
+          "accepted": false,
+          "timezone": "AoE",
+          "place": "China",
+          "conferenceDate": "October 2025",
+          "submissions": [
+            {
+              "round": "R1",
+              "paper": "2025-02-01",
+              "notification": "2025-07-15"
+            }
+          ],
+          "timeline": []
+        }
+      ],
+      "relations": {
+        "similar": [
+          {
+            "id": "imwut",
+            "why": "同属 UbiComp 旗下，主题几乎一致"
+          }
+        ],
+        "alternative": [
+          {
+            "id": "percom",
+            "why": "普适计算主题重叠，PerCom 偏通信与无设备感知"
+          },
+          {
+            "id": "mobisys",
+            "why": "移动感知议题相近，MobiSys 偏系统性能"
+          }
+        ],
+        "related": [
+          {
+            "id": "ndss",
+            "why": "感知隐私方向的出口"
+          },
+          {
+            "id": "imwut-j",
+            "why": "同源期刊版"
+          }
+        ]
+      }
     },
     {
       "id": "percom",
@@ -270,19 +326,6 @@
         "months": "提前 6 个月征稿",
         "bufferMonths": 1
       },
-      "history": [
-        {
-          "year": 2027,
-          "paper": "2026-09-11",
-          "notification": "2026-12-18"
-        },
-        {
-          "year": 2026,
-          "paper": "2025-09-12",
-          "notification": "2025-12-18"
-        }
-      ],
-      "deadlines": [],
       "submission": {
         "pageLimit": "9 页正文 + 1 页参考文献",
         "reviewModel": "double-blind",
@@ -298,13 +341,10 @@
       "acceptanceStats": {
         "source": null,
         "confidence": "none",
-        "note": "OpenAccept 未收录此会议。社区数据约 15%，未经官方核实，仅供参考"
+        "note": "OpenAccept 与 CCFDDL 均未收录此会议的公开录用统计",
+        "status": "missing",
+        "lastChecked": "2026-10-06"
       },
-      "related": [
-        "ubicomp",
-        "imwut",
-        "sensys"
-      ],
       "tips": "强制线下是最大的隐性成本，申签证要留出时间。接受率约 15%（社区数据，未核实）。有 rebuttal 环节，被拒的论文有二次机会。",
       "ccfByYear": [
         {
@@ -317,7 +357,59 @@
           "year": 2026,
           "rank": "B"
         }
-      ]
+      ],
+      "editions": [
+        {
+          "year": 2027,
+          "link": "https://percom2027.hotcrp.com/",
+          "accepted": true,
+          "timezone": "AoE",
+          "place": "Goa, India",
+          "conferenceDate": "March 08-12, 2027",
+          "submissions": [
+            {
+              "round": "注册",
+              "abstract": "2026-09-04",
+              "paper": "2026-09-11"
+            },
+            {
+              "round": "Rebuttal",
+              "paper": "2026-11-27"
+            }
+          ],
+          "timeline": [
+            {
+              "type": "notification",
+              "date": "2026-12-18",
+              "comment": "最终通知"
+            },
+            {
+              "type": "conference",
+              "date": "2027-03-08",
+              "comment": "会议召开"
+            }
+          ]
+        }
+      ],
+      "relations": {
+        "similar": [
+          {
+            "id": "ubicomp",
+            "why": "普适计算领域双旗舰"
+          }
+        ],
+        "alternative": [
+          {
+            "id": "sensys",
+            "why": "无设备感知可投两者，PerCom 偏通信基础设施"
+          },
+          {
+            "id": "imwut",
+            "why": "主题重叠，IMWUT 周期更短"
+          }
+        ],
+        "related": []
+      }
     },
     {
       "id": "ipsn",
@@ -351,14 +443,6 @@
         "months": "提前 7 个月征稿",
         "bufferMonths": 1
       },
-      "history": [
-        {
-          "year": 2026,
-          "paper": "2025-10-03",
-          "notification": "2026-02-18"
-        }
-      ],
-      "deadlines": [],
       "submission": {
         "pageLimit": "以官网为准",
         "reviewModel": "double-blind",
@@ -373,13 +457,10 @@
       "acceptanceStats": {
         "source": null,
         "confidence": "none",
-        "note": "OpenAccept 未收录此会议，暂不填写以免误导"
+        "note": "OpenAccept 与 CCFDDL 均未收录此会议的公开录用统计",
+        "status": "missing",
+        "lastChecked": "2026-10-06"
       },
-      "related": [
-        "sensys",
-        "mass",
-        "tosn"
-      ],
       "tips": "与 SenSys 征稿期接近，注意不要撞期。分布式算法、路由协议类创新是加分项。",
       "ccfByYear": [
         {
@@ -392,7 +473,53 @@
           "year": 2026,
           "rank": "B"
         }
-      ]
+      ],
+      "editions": [
+        {
+          "year": 2026,
+          "link": "https://ipsn.acm.org/2026/",
+          "accepted": false,
+          "timezone": "AoE",
+          "place": "待定",
+          "conferenceDate": "May 2026",
+          "submissions": [
+            {
+              "round": "全文",
+              "paper": "2025-10-03"
+            }
+          ],
+          "timeline": [
+            {
+              "type": "notification",
+              "date": "2026-02-18"
+            }
+          ]
+        }
+      ],
+      "relations": {
+        "similar": [
+          {
+            "id": "sensys",
+            "why": "同为传感器系统旗舰，SenSys 偏系统部署"
+          },
+          {
+            "id": "mass",
+            "why": "同偏网络与定位算法"
+          }
+        ],
+        "alternative": [
+          {
+            "id": "percom",
+            "why": "无设备感知议题相近，PerCom 更强调普适通信"
+          }
+        ],
+        "related": [
+          {
+            "id": "tosn",
+            "why": "传感器网络顶刊，理论工作常见出口"
+          }
+        ]
+      }
     },
     {
       "id": "sensys",
@@ -426,19 +553,6 @@
         "months": "提前 6-7 个月征稿",
         "bufferMonths": 1
       },
-      "history": [
-        {
-          "year": 2025,
-          "paper": "2025-05-28",
-          "notification": "2025-09-08"
-        },
-        {
-          "year": 2024,
-          "paper": "2024-05-30",
-          "notification": "2024-09-08"
-        }
-      ],
-      "deadlines": [],
       "submission": {
         "pageLimit": "以官网为准",
         "reviewModel": "double-blind",
@@ -504,14 +618,14 @@
             "accepted": 26,
             "rate": 17.11
           }
-        ]
+        ],
+        "status": "complete",
+        "coverage": {
+          "from": 2017,
+          "to": 2025,
+          "years": 8
+        }
       },
-      "related": [
-        "ipsn",
-        "percom",
-        "tosn",
-        "mass"
-      ],
       "tips": "录用率多年稳定在 17-25%，是本领域相对稳定的会议。系统类工作需要真实部署论证，评审会追问实际场景价值。",
       "ccfByYear": [
         {
@@ -524,7 +638,88 @@
           "year": 2026,
           "rank": "B"
         }
-      ]
+      ],
+      "editions": [
+        {
+          "year": 2027,
+          "link": "https://sensys.acm.org/2027/",
+          "accepted": true,
+          "timezone": "AoE",
+          "place": "USA",
+          "conferenceDate": "May 17-20, 2027",
+          "submissions": [
+            {
+              "round": "全文",
+              "paper": "2026-11-06"
+            }
+          ],
+          "timeline": [
+            {
+              "type": "conference",
+              "date": "2027-05-17",
+              "comment": "会议召开"
+            }
+          ],
+          "statsNote": "上一届（2025）主赛道 45/235 = 19.1%"
+        },
+        {
+          "year": 2025,
+          "link": "https://sensys.org/2025/",
+          "accepted": false,
+          "timezone": "AoE",
+          "place": "Irvine, CA, USA",
+          "conferenceDate": "May 6-9, 2025",
+          "submissions": [
+            {
+              "round": "全文",
+              "paper": "2025-05-28"
+            }
+          ],
+          "timeline": [
+            {
+              "type": "notification",
+              "date": "2025-09-08"
+            }
+          ],
+          "stats": {
+            "submitted": 235,
+            "accepted": 45,
+            "rate": 19.15
+          }
+        }
+      ],
+      "relations": {
+        "similar": [
+          {
+            "id": "ipsn",
+            "why": "同属传感器系统，IPSN 更偏底层网络算法与理论"
+          },
+          {
+            "id": "mobisys",
+            "why": "同强调系统实现，SenSys 更聚焦传感"
+          }
+        ],
+        "alternative": [
+          {
+            "id": "ubicomp",
+            "why": "无设备感知等议题重叠，但 UbiComp 以人为中心"
+          },
+          {
+            "id": "imwut",
+            "why": "同属 UbiComp 系，IMWUT 评审周期短一半"
+          }
+        ],
+        "related": [
+          {
+            "id": "tosn",
+            "why": "SenSys 优秀论文的常见扩展出口"
+          },
+          {
+            "id": "tmc",
+            "why": "移动计算方向技术交叉"
+          }
+        ]
+      }
     },
     {
       "id": "mobisys",
@@ -558,19 +753,6 @@
         "months": "提前 7 个月征稿",
         "bufferMonths": 1
       },
-      "history": [
-        {
-          "year": 2026,
-          "paper": "2025-12-20",
-          "notification": "2026-03-20"
-        },
-        {
-          "year": 2025,
-          "paper": "2024-12-20",
-          "notification": "2025-03-20"
-        }
-      ],
-      "deadlines": [],
       "submission": {
         "pageLimit": "以官网为准",
         "reviewModel": "double-blind",
@@ -638,13 +820,14 @@
             "accepted": 37,
             "rate": 26.81
           }
-        ]
+        ],
+        "status": "complete",
+        "coverage": {
+          "from": 2018,
+          "to": 2025,
+          "years": 8
+        }
       },
-      "related": [
-        "ubicomp",
-        "imwut",
-        "percom"
-      ],
       "tips": "录用率近 8 年从 27% 降到 16%，趋势明显收紧。投之前要看清跟组里工作的匹配度。Short Paper 是性价比选择。",
       "ccfByYear": [
         {
@@ -657,7 +840,58 @@
           "year": 2026,
           "rank": "B"
         }
-      ]
+      ],
+      "editions": [
+        {
+          "year": 2026,
+          "link": "https://mobsys.org/2026/",
+          "accepted": false,
+          "timezone": "AoE",
+          "place": "USA",
+          "conferenceDate": "June 2026",
+          "submissions": [
+            {
+              "round": "全文",
+              "paper": "2025-12-20"
+            }
+          ],
+          "timeline": [
+            {
+              "type": "notification",
+              "date": "2026-03-20"
+            }
+          ],
+          "stats": {
+            "submitted": 233,
+            "accepted": 42,
+            "rate": 18.03
+          }
+        }
+      ],
+      "relations": {
+        "similar": [
+          {
+            "id": "sensys",
+            "why": "系统实现导向相近"
+          }
+        ],
+        "alternative": [
+          {
+            "id": "imwut",
+            "why": "移动感知议题相近，IMWUT 评审更快"
+          },
+          {
+            "id": "percom",
+            "why": "移动普适感知可投两者"
+          }
+        ],
+        "related": [
+          {
+            "id": "tmc",
+            "why": "TMC 是 MobiSys 优秀论文的扩展出口"
+          }
+        ]
+      }
     },
     {
       "id": "imwut",
@@ -691,14 +925,6 @@
         "months": "全年滚动",
         "bufferMonths": 0
       },
-      "history": [
-        {
-          "year": 2026,
-          "paper": "2026-05-01",
-          "notification": "2026-07-26"
-        }
-      ],
-      "deadlines": [],
       "submission": {
         "pageLimit": "以官网为准",
         "reviewModel": "double-blind",
@@ -711,13 +937,10 @@
       "acceptanceStats": {
         "source": null,
         "confidence": "none",
-        "note": "OpenAccept 未收录此会议，暂不填写"
+        "note": "OpenAccept 与 CCFDDL 均未收录此会议的公开录用统计",
+        "status": "missing",
+        "lastChecked": "2026-10-06"
       },
-      "related": [
-        "ubicomp",
-        "percom",
-        "mobisys"
-      ],
       "tips": "首轮决定约 2-3 个月，比 UbiComp 主会快很多。时间紧的时候是好选择。",
       "ccfByYear": [
         {
@@ -730,7 +953,58 @@
           "year": 2026,
           "rank": "B"
         }
-      ]
+      ],
+      "editions": [
+        {
+          "year": 2026,
+          "link": "https://dl.acm.org/journal/imwut",
+          "accepted": true,
+          "timezone": "AoE",
+          "place": "Online",
+          "conferenceDate": "2026",
+          "submissions": [
+            {
+              "round": "R1",
+              "paper": "2026-02-01"
+            },
+            {
+              "round": "R2",
+              "paper": "2026-05-01"
+            },
+            {
+              "round": "R3",
+              "paper": "2026-11-01",
+              "notification": "2027-02-01"
+            }
+          ],
+          "timeline": [
+            {
+              "type": "notification",
+              "date": "2026-07-26"
+            }
+          ]
+        }
+      ],
+      "relations": {
+        "similar": [
+          {
+            "id": "ubicomp",
+            "why": "同属 UbiComp 系"
+          }
+        ],
+        "alternative": [
+          {
+            "id": "mobisys",
+            "why": "移动感知可投两者，IMWUT 周期短"
+          }
+        ],
+        "related": [
+          {
+            "id": "imwut-j",
+            "why": "同源期刊版"
+          }
+        ]
+      }
     },
     {
       "id": "mass",
@@ -764,14 +1038,6 @@
         "months": "提前 6 个月征稿",
         "bufferMonths": 1
       },
-      "history": [
-        {
-          "year": 2026,
-          "paper": "2026-05-10",
-          "notification": "2026-07-18"
-        }
-      ],
-      "deadlines": [],
       "submission": {
         "pageLimit": "以官网为准",
         "reviewModel": "double-blind",
@@ -786,12 +1052,10 @@
       "acceptanceStats": {
         "source": null,
         "confidence": "none",
-        "note": "OpenAccept 未收录此会议，暂不填写"
+        "note": "OpenAccept 与 CCFDDL 均未收录此会议的公开录用统计",
+        "status": "missing",
+        "lastChecked": "2026-10-06"
       },
-      "related": [
-        "ipsn",
-        "sensys"
-      ],
       "tips": "CCF C 但领域内认可度可以，定位算法类工作在上面认可度不错。适合作为 IPSN/SenSys 之外的备选。",
       "ccfByYear": [
         {
@@ -804,7 +1068,49 @@
           "year": 2026,
           "rank": "C"
         }
-      ]
+      ],
+      "editions": [
+        {
+          "year": 2026,
+          "link": "https://www.ieee-mass.org/2026/",
+          "accepted": false,
+          "timezone": "AoE",
+          "place": "待定",
+          "conferenceDate": "October 2026",
+          "submissions": [
+            {
+              "round": "全文",
+              "paper": "2026-05-10"
+            }
+          ],
+          "timeline": [
+            {
+              "type": "notification",
+              "date": "2026-07-18"
+            }
+          ]
+        }
+      ],
+      "relations": {
+        "similar": [
+          {
+            "id": "ipsn",
+            "why": "同偏网络与定位算法"
+          }
+        ],
+        "alternative": [
+          {
+            "id": "sensys",
+            "why": "同为传感器系统，SenSys 影响力更大"
+          }
+        ],
+        "related": [
+          {
+            "id": "twc",
+            "why": "理论工作可扩展投 TWC"
+          }
+        ]
+      }
     },
     {
       "id": "ndss",
@@ -837,14 +1143,6 @@
         "months": "提前 7 个月征稿",
         "bufferMonths": 1
       },
-      "history": [
-        {
-          "year": 2026,
-          "paper": "2025-07-25",
-          "notification": "2025-12-15"
-        }
-      ],
-      "deadlines": [],
       "submission": {
         "pageLimit": "以官网为准",
         "reviewModel": "double-blind",
@@ -897,12 +1195,14 @@
             "accepted": 88,
             "rate": 17.39
           }
-        ]
+        ],
+        "status": "complete",
+        "coverage": {
+          "from": 2020,
+          "to": 2025,
+          "years": 6
+        }
       },
-      "related": [
-        "ubicomp",
-        "percom"
-      ],
       "tips": "如果工作涉及用 CSI 做隐私推断、或感知系统的攻击面，这是主要出口。2025 年投稿量翻倍是重要信号——这个方向正在变热。",
       "ccfByYear": [
         {
@@ -915,7 +1215,44 @@
           "year": 2026,
           "rank": "A"
         }
-      ]
+      ],
+      "editions": [
+        {
+          "year": 2026,
+          "link": "https://www.ndss-symposium.org/2026/",
+          "accepted": false,
+          "timezone": "AoE",
+          "place": "USA",
+          "conferenceDate": "Feb 2026",
+          "submissions": [
+            {
+              "round": "全文",
+              "paper": "2025-07-25"
+            }
+          ],
+          "timeline": [
+            {
+              "type": "notification",
+              "date": "2025-12-15"
+            }
+          ],
+          "stats": {
+            "submitted": 1311,
+            "accepted": 211,
+            "rate": 16.09
+          }
+        }
+      ],
+      "relations": {
+        "similar": [],
+        "alternative": [],
+        "related": [
+          {
+            "id": "ubicomp",
+            "why": "感知隐私是UbiComp 近年活跃议题"
+          }
+        ]
+      }
     }
   ],
   "journals": [
@@ -952,13 +1289,10 @@
       "acceptanceStats": {
         "source": null,
         "confidence": "none",
-        "note": "期刊录用率通常不公开"
+        "note": "期刊录用率通常不公开，此处不做估算",
+        "status": "none",
+        "lastChecked": "2026-10-06"
       },
-      "related": [
-        "sensys",
-        "ipsn",
-        "tmc"
-      ],
       "tips": "与 SenSys / IPSN 有紧密关系。会议优秀工作被邀请扩展是常见路径。",
       "ccfByYear": [
         {
@@ -966,7 +1300,30 @@
           "year": 2022,
           "rank": "B"
         }
-      ]
+      ],
+      "relations": {
+        "similar": [
+          {
+            "id": "twc",
+            "why": "无线与传感交叉，同为 CCF A/B顶刊"
+          },
+          {
+            "id": "tmc",
+            "why": "移动与传感方向顶刊"
+          }
+        ],
+        "alternative": [],
+        "related": [
+          {
+            "id": "sensys",
+            "why": "SenSys 优秀论文常被邀请扩展投TOSN"
+          },
+          {
+            "id": "ipsn",
+            "why": "IPSN 理论工作常见扩展出口"
+          }
+        ]
+      }
     },
     {
       "id": "imwut-j",
@@ -1001,7 +1358,9 @@
       "acceptanceStats": {
         "source": null,
         "confidence": "none",
-        "note": "期刊录用率通常不公开"
+        "note": "期刊录用率通常不公开，此处不做估算",
+        "status": "none",
+        "lastChecked": "2026-10-06"
       },
       "related": [
         "ubicomp",
@@ -1014,7 +1373,21 @@
           "year": 2022,
           "rank": "B"
         }
-      ]
+      ],
+      "relations": {
+        "similar": [
+          {
+            "id": "imwut",
+            "why": "同源会议版与期刊版"
+          }
+        ],
+        "related": [
+          {
+            "id": "tcadh",
+            "why": "群体感知方向"
+          }
+        ]
+      }
     },
     {
       "id": "tmc",
@@ -1049,13 +1422,10 @@
       "acceptanceStats": {
         "source": null,
         "confidence": "none",
-        "note": "期刊录用率通常不公开"
+        "note": "期刊录用率通常不公开，此处不做估算",
+        "status": "none",
+        "lastChecked": "2026-10-06"
       },
-      "related": [
-        "mobisys",
-        "imwut-j",
-        "tosn"
-      ],
       "tips": "审稿周期长（5-8 个月），要做被拒后转投的时间规划。CCF A 但中科院二区。",
       "ccfByYear": [
         {
@@ -1063,7 +1433,27 @@
           "year": 2022,
           "rank": "A"
         }
-      ]
+      ],
+      "relations": {
+        "similar": [
+          {
+            "id": "twc",
+            "why": "同为 CCF A 顶刊"
+          }
+        ],
+        "alternative": [
+          {
+            "id": "mobisys",
+            "why": "移动系统工作可投两者"
+          }
+        ],
+        "related": [
+          {
+            "id": "tosn",
+            "why": "传感与移动交叉"
+          }
+        ]
+      }
     },
     {
       "id": "twc",
@@ -1098,7 +1488,9 @@
       "acceptanceStats": {
         "source": null,
         "confidence": "none",
-        "note": "期刊录用率通常不公开"
+        "note": "期刊录用率通常不公开，此处不做估算",
+        "status": "none",
+        "lastChecked": "2026-10-06"
       },
       "related": [
         "ipsn",
@@ -1111,7 +1503,31 @@
           "year": 2022,
           "rank": "A"
         }
-      ]
+      ],
+      "relations": {
+        "similar": [
+          {
+            "id": "tmc",
+            "why": "同为 CCF A 顶刊"
+          },
+          {
+            "id": "tosn",
+            "why": "传感器网络顶刊，理论工作出口"
+          }
+        ],
+        "alternative": [
+          {
+            "id": "jsen",
+            "why": "传感器应用类工作可投此刊"
+          }
+        ],
+        "related": [
+          {
+            "id": "mass",
+            "why": "理论工作来源"
+          }
+        ]
+      }
     },
     {
       "id": "jsen",
@@ -1146,14 +1562,22 @@
       "acceptanceStats": {
         "source": null,
         "confidence": "none",
-        "note": "期刊录用率通常不公开"
+        "note": "期刊录用率通常不公开，此处不做估算",
+        "status": "none",
+        "lastChecked": "2026-10-06"
       },
-      "related": [
-        "twc",
-        "tmc"
-      ],
       "tips": "组内投稿最稳妥的期刊。实测数据完整的话命中率较高，需提前确认版面费预算。",
-      "ccfByYear": []
+      "ccfByYear": [],
+      "relations": {
+        "similar": [
+          {
+            "id": "twc",
+            "why": "同为传感器方向，可作理论升级出口"
+          }
+        ],
+        "alternative": [],
+        "related": []
+      }
     },
     {
       "id": "tcadh",
@@ -1187,13 +1611,27 @@
       "acceptanceStats": {
         "source": null,
         "confidence": "none",
-        "note": "期刊录用率通常不公开"
+        "note": "期刊录用率通常不公开，此处不做估算",
+        "status": "none",
+        "lastChecked": "2026-10-06"
       },
-      "related": [
-        "ubicomp"
-      ],
       "tips": "分区偏低，适合作为毕业前的时间兜底，不适合作为主要成果。审稿 2-4 个月较快。",
-      "ccfByYear": []
+      "ccfByYear": [],
+      "relations": {
+        "similar": [],
+        "alternative": [
+          {
+            "id": "imwut-j",
+            "why": "群体行为感知类工作可投此刊"
+          }
+        ],
+        "related": [
+          {
+            "id": "imwut-j",
+            "why": "同为群体感知方向"
+          }
+        ]
+      }
     }
   ]
 }

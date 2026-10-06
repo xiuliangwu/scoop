@@ -75,12 +75,62 @@ ALL.forEach(v => {
   }
 })
 
-// 7. 会议必需字段
+// 7. 会议必需字段（editions 事件流模型）
 venues.conferences.forEach(c => {
   if (!c.submission) errs.push(`${c.shortName} 缺 submission`)
-  if (!c.timeline) errs.push(`${c.shortName} 缺 timeline`)
-  if (!c.history?.length) errs.push(`${c.shortName} 缺 history（截稿推算依赖它）`)
   if (!c.valuesNote) warns.push(`${c.shortName} 缺 valuesNote（编辑解读，Profile 会显得空）`)
+
+  // 事件流结构
+  if (!c.editions?.length) { errs.push(`${c.shortName} 缺 editions（投稿周期数据）`); return }
+  c.editions.forEach(ed => {
+    if (!ed.year) errs.push(`${c.shortName} 某届缺 year`)
+    if (!ed.timezone) warns.push(`${c.shortName} ${ed.year} 缺 timezone（CCFDDL 惯例字段，影响 deadline 理解）`)
+    const hasSub = ed.submissions?.length || ed.timeline?.length
+    if (!hasSub) errs.push(`${c.shortName} ${ed.year} 届既无 submissions 也无 timeline`)
+    // 日期格式
+    ;(ed.timeline || []).forEach(ev => {
+      if (ev.date && !/^\d{4}-\d{2}-\d{2}$/.test(ev.date))
+        errs.push(`${c.shortName} ${ed.year} timeline 事件 ${ev.type} 日期格式错误: ${ev.date}`)
+      if (ev.type && !['abstract', 'paper', 'rebuttal', 'notification', 'camera', 'conference'].includes(ev.type))
+        warns.push(`${c.shortName} 未知事件类型: ${ev.type}`)
+    })
+    ;(ed.submissions || []).forEach(s => {
+      for (const k of ['abstract', 'paper', 'rebuttal', 'notification']) {
+        if (s[k] && !/^\d{4}-\d{2}-\d{2}$/.test(s[k]))
+          errs.push(`${c.shortName} ${ed.year} ${s.round || ''} ${k} 日期格式错误: ${s[k]}`)
+      }
+    })
+  })
+  // 未来截稿应该来自 editions，不允许再有推算字段
+  if (c.deadlines) warns.push(`${c.shortName} 仍有旧 deadlines 字段，应迁移到 editions[].submissions`)
+  if (c.history) warns.push(`${c.shortName} 仍有旧 history 字段，应迁移到 editions`)
+})
+
+// 7b. relations 三分法
+ALL.forEach(v => {
+  const rel = v.relations
+  if (!rel) { warns.push(`${v.shortName} 缺relations（similar/alternative/related）`); return }
+  for (const key of ['similar', 'alternative', 'related']) {
+    const list = rel[key] || []
+    list.forEach(item => {
+      if (!ids.has(item.id)) errs.push(`${v.shortName}.relations.${key} 指向不存在的 "${item.id}"`)
+      if (item.id === v.id) errs.push(`${v.shortName}.relations.${key} 指向了自己`)
+      if (!item.why || item.why.length < 5) warns.push(`${v.shortName} → ${item.id} 缺 why 说明`)
+    })
+  }
+})
+
+// 7c. Data Completeness 四态
+const STATUS = ['complete', 'partial', 'missing', 'none']
+ALL.forEach(v => {
+  const s = v.acceptanceStats
+  if (!s?.status) { errs.push(`${v.shortName} 缺 acceptanceStats.status（四态）`); return }
+  if (!STATUS.includes(s.status)) { errs.push(`${v.shortName} status 非法: ${s.status}`); return }
+  const h = s.history || []
+  if (h.length && !s.coverage) errs.push(`${v.shortName} 有 history 但缺 coverage`)
+  if (!h.length && s.coverage) errs.push(`${v.shortName} 无 history 却有 coverage`)
+  if ((s.status === 'missing' || s.status === 'none') && !s.lastChecked)
+    warns.push(`${v.shortName} 标为 ${s.status} 但缺 lastChecked（应说明何时核对过）`)
 })
 
 // 8. 战报引用
