@@ -69,6 +69,12 @@ if (areaCard) {
 }
 
 // 4. 对比页
+const startTab = tabs.find(t => t.textContent.trim() === '新手指南')
+if (startTab) {
+  startTab.dispatchEvent(new window.MouseEvent('click', { bubbles: true }))
+  results.push(probe('新手指南'))
+}
+
 const cmpTab = tabs.find(t => t.textContent.trim() === '对比')
 if (cmpTab) {
   cmpTab.dispatchEvent(new window.MouseEvent('click', { bubbles: true }))
@@ -76,21 +82,21 @@ if (cmpTab) {
 }
 
 // 5. 会议与期刊
-const vTab = tabs.find(t => t.textContent.trim() === '会议与期刊')
+const vTab = tabs.find(t => t.textContent.trim() === 'Venue')
 if (vTab) {
   vTab.dispatchEvent(new window.MouseEvent('click', { bubbles: true }))
   results.push(probe('会议与期刊'))
 }
 
 // 6. 看板
-const hTab = tabs.find(t => t.textContent.trim() === '看板')
+const hTab = tabs.find(t => t.textContent.trim() === '截止')
 if (hTab) {
   hTab.dispatchEvent(new window.MouseEvent('click', { bubbles: true }))
   results.push(probe('看板'))
 }
 
 // 7. 战报（空态）
-const rTab = tabs.find(t => t.textContent.trim() === '论文战报')
+const rTab = tabs.find(t => t.textContent.trim() === '战报')
 if (rTab) {
   rTab.dispatchEvent(new window.MouseEvent('click', { bubbles: true }))
   results.push(probe('论文战报'))
@@ -108,6 +114,28 @@ for (const r of results) {
     String(r.rows).padStart(5),
     String(r.cards).padStart(5)
   )
+}
+
+// 新手指南专项检查
+const guideTab = [...document.querySelectorAll('header nav button')]
+  .find(t => t.textContent.trim() === '新手指南')
+if (guideTab) {
+  guideTab.dispatchEvent(new window.MouseEvent('click', { bubbles: true }))
+  console.log('')
+  console.log('=== 新手指南专项 ===')
+  console.log('可折叠步骤数:', document.querySelectorAll('details.step').length)
+  console.log('默认展开数  :', document.querySelectorAll('details.step[open]').length)
+  console.log('FAQ 条目数  :', document.querySelectorAll('details.faq').length)
+  console.log('格式速查表行:', document.querySelectorAll('table.data tbody tr').length)
+  console.log('时间线节点  :', document.querySelectorAll('.timeline-list li').length)
+  console.log('review 清单 :', document.querySelectorAll('.check-list li').length)
+  // 展开所有步骤看内容是否完整
+  document.querySelectorAll('details.step').forEach(d => { d.open = true })
+  const bodyLen = [...document.querySelectorAll('details.step .step-body')]
+    .map(b => b.textContent.trim().length)
+  console.log('各步骤正文字数:', bodyLen.join(', '))
+  const emptyStep = bodyLen.filter(n => n < 150).length
+  console.log('内容过短的步骤:', emptyStep === 0 ? '无' : emptyStep + ' 个')
 }
 
 console.log('')

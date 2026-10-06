@@ -60,11 +60,6 @@
       "color": "teal"
     },
     {
-      "id": "har",
-      "name": "活动识别",
-      "color": "teal"
-    },
-    {
       "id": "localization",
       "name": "定位追踪",
       "color": "green"
@@ -98,6 +93,11 @@
       "id": "embedded",
       "name": "嵌入式",
       "color": "gray"
+    },
+    {
+      "id": "har",
+      "name": "活动识别",
+      "color": "teal"
     },
     {
       "id": "wearable",
@@ -1276,7 +1276,7 @@
       "openAccess": "hybrid",
       "apc": "约 2600 美元",
       "reviewCycle": "首次决定约 3-6 个月",
-      "frequency": "每年 8 期",
+      "frequency": "每年 6 期（双月刊）",
       "values": {
         "hci": 1,
         "sensing": 5,
@@ -1323,7 +1323,10 @@
             "why": "IPSN 理论工作常见扩展出口"
           }
         ]
-      }
+      },
+      "founded": 2005,
+      "pageLimit": "无页数限制，按需撰写",
+      "topicsNote": "覆盖传感器网络全栈：应用、数据存储与查询、分布式信号处理、能源管理、容错、传感网基础理论、网内处理、定位服务、低功耗硬件、网络协议、编程模型、传感融合、安全隐私等"
     },
     {
       "id": "imwut-j",
@@ -1345,7 +1348,7 @@
       "openAccess": "hybrid",
       "apc": "约 2600 美元",
       "reviewCycle": "首轮决定约 2-3 个月",
-      "frequency": "每年 4 期",
+      "frequency": "每年 4 期（季刊）",
       "values": {
         "hci": 5,
         "sensing": 4,
@@ -1387,7 +1390,10 @@
             "why": "群体感知方向"
           }
         ]
-      }
+      },
+      "founded": 2017,
+      "pageLimit": "以官网为准",
+      "topicsNote": "与 UbiComp 主会同主题：可穿戴、移动系统、情境感知、健康监测、隐私、交互设计等"
     },
     {
       "id": "tmc",
@@ -1409,7 +1415,7 @@
       "openAccess": "hybrid",
       "apc": "约 2400 美元",
       "reviewCycle": "首次决定约 5-8 个月",
-      "frequency": "每年 12 期",
+      "frequency": "每年 12 期（月刊）",
       "values": {
         "hci": 2,
         "sensing": 3,
@@ -1453,7 +1459,10 @@
             "why": "传感与移动交叉"
           }
         ]
-      }
+      },
+      "founded": 2002,
+      "pageLimit": "IEEE 模板常规长度",
+      "topicsNote": "移动计算系统全栈：架构、移动系统与应用、无线网络、移动感知、位置服务"
     },
     {
       "id": "twc",
@@ -1475,7 +1484,7 @@
       "openAccess": "hybrid",
       "apc": "约 2400 美元",
       "reviewCycle": "首次决定约 4-6 个月",
-      "frequency": "每年 12 期",
+      "frequency": "每年 12 期（月刊）",
       "values": {
         "hci": 1,
         "sensing": 2,
@@ -1527,7 +1536,10 @@
             "why": "理论工作来源"
           }
         ]
-      }
+      },
+      "founded": 2002,
+      "pageLimit": "IEEE 模板常规长度",
+      "topicsNote": "无线通信理论：波形设计与优化、资源分配、编码、MIMO、感知与通信交叉、无线网络理论"
     },
     {
       "id": "jsen",
@@ -1549,7 +1561,7 @@
       "openAccess": "hybrid",
       "apc": "约 2400 美元",
       "reviewCycle": "首次决定约 3-5 个月",
-      "frequency": "每月15 期",
+      "frequency": "每年 24 期（半月刊）",
       "values": {
         "hci": 1,
         "sensing": 5,
@@ -1577,7 +1589,10 @@
         ],
         "alternative": [],
         "related": []
-      }
+      },
+      "founded": 2001,
+      "pageLimit": "IEEE 模板，常规 8–12 页",
+      "topicsNote": "传感器与测量：物理传感器、RF/毫米波传感、生物传感、传感系统实现与标定"
     },
     {
       "id": "tcadh",
@@ -1598,7 +1613,7 @@
       "openAccess": "hybrid",
       "apc": "约 2400 美元",
       "reviewCycle": "首次决定约 2-4 个月",
-      "frequency": "每年 4 期",
+      "frequency": "每年 4 期（季刊）",
       "values": {
         "hci": 4,
         "sensing": 3,
@@ -1631,7 +1646,10 @@
             "why": "同为群体感知方向"
           }
         ]
-      }
+      },
+      "founded": 2014,
+      "pageLimit": "IEEE 模板常规长度",
+      "topicsNote": "计算社会科学：群体行为建模、社交媒体分析、群体感知、隐私与公平性"
     }
   ]
 }

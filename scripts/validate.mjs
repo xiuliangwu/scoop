@@ -31,15 +31,15 @@ areasData.areas.forEach(a => a.venueIds.forEach(id => {
   if (!ids.has(id)) errs.push(`领域 ${a.id} 指向不存在的 venue "${id}"`)
 }))
 
-// 4. 领域内 venue 是否真的相关（至少共享一个标签或子主题）
+// 4. 领域内venue 数量健康度（不做标签交集判断——
+//领域 topic 与 venue tag 是两套命名体系，强行匹配会产生大量误报）
 areasData.areas.forEach(a => {
-  a.venueIds.forEach(id => {
-    const v = ALL.find(x => x.id === id)
-    if (!v) return
-    const topicIds = a.topics.map(t => t.id)
-    const hit = (v.tags || []).some(t => topicIds.includes(t)) || a.venueIds.length <= 8
-    if (!hit) warns.push(`${a.name} → ${v.shortName} 标签与子主题无交集，请确认关联是否合理`)
-  })
+  if (a.venueIds.length < 2) {
+    warns.push(`领域「${a.name}」只关联了 ${a.venueIds.length} 个 venue，考虑是否需要补充`)
+  }
+  if (a.venueIds.length > 10) {
+    warns.push(`领域「${a.name}」关联了 ${a.venueIds.length} 个 venue，列表过长不利于筛选`)
+  }
 })
 
 // 5. values 维度完整且在1-5 范围
@@ -158,6 +158,35 @@ ALL.forEach(v => {
   const snLower = v.shortName.toLowerCase().replace(/[^a-z]/g, '')
   if (snLower.length >= 3 && !idLower.includes(snLower.slice(0, 3)))
     warns.push(`${v.shortName} 的 id "${v.id}" 与缩写不符，检查是否写错`)
+})
+
+// 11. 孤立venue：未被任何领域引用（页面上难以被发现）
+const usedByArea = new Set(areasData.areas.flatMap(a => a.venueIds))
+ALL.forEach(v => {
+  if (!usedByArea.has(v.id)) errs.push(`${v.shortName} 未被任何研究领域关联，页面上无法从领域入口找到`)
+})
+
+// 12. 领域内应至少有一个会议（纯期刊的领域在投稿决策上意义有限）
+areasData.areas.forEach(a => {
+  const confIds = new Set(venues.conferences.map(c => c.id))
+  const n = a.venueIds.filter(id => confIds.has(id)).length
+  if (n === 0) warns.push(`领域「${a.name}」没有关联任何会议，只有期刊`)
+})
+
+// 13. id 命名陷阱：同名不同类型（如 imwut 会议 vs imwut-j 期刊）
+const shortNames = {}
+ALL.forEach(v => {
+  const k = v.shortName.toLowerCase()
+  ;(shortNames[k] = shortNames[k] || []).push(v)
+})
+Object.entries(shortNames).forEach(([k, list]) => {
+  if (list.length > 1) {
+    const types = list.map(x => x.type).join('+')
+    // 同名不同 id 是正常的（会议版+期刊版），但要在文档里能分辨
+    if (!list.every(x => x.id.includes('j') || x.type === list[0].type)) {
+      warns.push(`${list.map(x => x.shortName).join(' / ')} 同名但 id 无区分标记（当前 ${types}）`)
+    }
+  }
 })
 
 // 输出
