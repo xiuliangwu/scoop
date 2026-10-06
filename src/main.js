@@ -1,3 +1,4 @@
+import './style.css'
 import venuesRaw from '../data/venues.json'
 import reportsRaw from '../data/reports.json'
 
