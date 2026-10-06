@@ -26,20 +26,36 @@ const state = { tab: 'home', tag: 'all', q: '', showPrivate: false }
 const app = document.getElementById('app')
 
 /* ---------- upstream deadlines ---------- */
-// 用往年真实截稿日期推算下一届，仅作规划参考，页面已标注需核对官网
+// 收集未来的截稿日期。两种来源：
+//   1. deadlines 数组 = 官网确认的真实日期，优先展示
+//   2. 由往年 history 推算 = 规划参考，标注「推算」
 function upcomingDeadlines() {
   const out = []
   const now = new Date()
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
 
   for (const c of venuesRaw.conferences) {
+    // 先收真实日期
+    for (const dl of c.deadlines || []) {
+      if (!dl.date) continue
+      const d = daysUntil(dl.date)
+      if (d < -30 || d > 400) continue
+      out.push({
+        venue: c,
+        date: dl.date,
+        days: d,
+        label: dl.type || '截稿',
+        est: false
+      })
+    }
+
     if (!c.timeline?.cycle || !c.history?.length) continue
     const latest = [...c.history]
       .filter(h => h.paper)
       .sort((a, b) => b.year - a.year)[0]
     if (!latest?.paper) continue
 
-    // yearStep: 1 = 每年，2 = 隔年（如 ICCV 只在奇数年举办）
+    // yearStep: 1 = 每年，2 = 隔年
     const step = c.timeline.yearStep || 1
     const [baseYear, pm, pd] = latest.paper.split('-').map(Number)
     if (!pm || !pd) continue
@@ -67,9 +83,16 @@ function upcomingDeadlines() {
 
     const d = daysUntil(localISO(est))
     if (d < -30 || d > 400) continue
-    out.push({ venue: c, date: localISO(est), days: d, est: true })
+    out.push({
+      venue: c,
+      date: localISO(est),
+      days: d,
+      label: '预计截稿',
+      est: true
+    })
   }
-  return out.sort((a, b) => a.days - b.days)
+  // 真实日期优先（不标注「推算」），排在前；推算的作为规划参考
+  return out.sort((a, b) => (a.est === b.est ? a.days - b.days : a.est ? 1 : -1))
 }
 
 // 把日期平移到目标月份。若该月没有 day 号（如 3-31 往前推一个月），
@@ -90,7 +113,7 @@ const deadlineRow = d => {
   const cls = d.days < 0 ? 'urgent' : d.days <= 30 ? 'urgent' : d.days <= 90 ? 'soon' : 'normal'
   const left = d.days < 0 ? '已过' : d.days === 0 ? '今天' : `${d.days} 天`
   return `<div class="cd-row">
-    <span class="cd-name">${d.venue.shortName}${d.est ? ' <span class="badge b-gray">推算</span>' : ''}</span>
+    <span class="cd-name">${d.venue.shortName}<span class="badge ${d.est ? 'b-gray' : 'b-green'}">${d.label}</span></span>
     <span class="cd-date">${fmt(d.date)}</span>
     <span class="cd-left ${cls}">${left}</span>
   </div>`
@@ -107,11 +130,11 @@ function homeView() {
   return `
   <div class="page-head">
     <h1>投稿信息看板</h1>
-    <p>组内会议与期刊的截止时间、投稿经验和历史记录</p>
+    <p>${META.field || ''} · 组内会议与期刊的截止时间、投稿经验和历史记录</p>
   </div>
   <div class="banner">
     <b>数据更新于 ${META.lastUpdated}</b>
-    <span>标注「推算」的截止日期由往年周期估算，实际日期请以官网 CFP 为准。</span>
+    <span>标注「预计截稿」的日期由往年周期估算，仅作规划参考；实际日期请以官网 CFP 为准。</span>
   </div>
 
   <section>
